@@ -1,0 +1,52 @@
+state,unemployment,urbanization,median_household_income,perc_population_with_high_school_degree,perc_non_citizen,gini_index,perc_non_white,hate_crimes_per_100k_splc
+Alabama,high,low,42278,0.821,0.02,0.472,0.35,0.125838926
+Alaska,high,low,67629,0.914,0.04,0.422,0.42,0.143740118
+Arizona,high,high,49254,0.842,0.1,0.455,0.49,0.225319954
+Arkansas,high,low,44922,0.824,0.04,0.458,0.26,0.069060773
+California,high,high,60487,0.806,0.13,0.471,0.61,0.255805361
+Colorado,low,high,60940,0.893,0.06,0.457,0.31,0.390523301
+Connecticut,high,high,70161,0.886,0.06,0.486,0.3,0.335392269
+Delaware,low,high,57522,0.874,0.05,0.44,0.37,0.322754169
+District of Columbia,high,high,68277,0.871,0.11,0.532,0.63,1.52230172
+Florida,high,high,46140,0.853,0.09,0.474,0.46,0.187521223
+Georgia,high,high,49555,0.839,0.08,0.468,0.48,0.120420267
+Hawaii,low,low,71223,0.904,0.08,0.433,0.81,N/A
+Idaho,low,low,53438,0.884,0.04,0.433,0.16,0.124208173
+Illinois,high,high,54916,0.864,0.07,0.465,0.37,0.195344549
+Indiana,low,low,48060,0.866,0.03,0.44,0.2,0.247008877
+Iowa,low,low,57810,0.914,0.03,0.427,0.15,0.454427421
+Kansas,low,low,53444,0.897,0.04,0.445,0.25,0.105152471
+Kentucky,low,low,42786,0.817,0.03,0.466,0.15,0.324396969
+Louisiana,high,high,42406,0.822,0.02,0.475,0.42,0.109733348
+Maine,low,low,51710,0.902,,0.437,0.09,0.615574023
+Maryland,low,high,76165,0.89,0.08,0.443,0.5,0.37043897
+Massachusetts,low,high,63151,0.89,0.09,0.475,0.27,0.630810592
+Michigan,low,high,52005,0.879,0.04,0.451,0.24,0.403779375
+Minnesota,low,low,67244,0.915,0.05,0.44,0.18,0.62747993
+Mississippi,high,low,35521,0.804,,0.468,0.44,0.067446801
+Missouri,high,low,56630,0.868,0.02,0.455,0.2,0.18452351
+Montana,low,low,51102,0.908,0.01,0.435,0.1,0.495491032
+Nebraska,low,low,56870,0.898,0.05,0.432,0.21,0.159489633
+Nevada,high,high,49875,0.839,0.1,0.448,0.5,0.14167316
+New Hampshire,low,low,73397,0.913,0.03,0.425,0.09,0.151549595
+New Jersey,high,high,65243,0.874,0.11,0.464,0.44,0.078305908
+New Mexico,high,low,46686,0.828,0.06,0.464,0.62,0.294811321
+New York,low,high,54310,0.847,0.1,0.499,0.42,0.350620446
+North Carolina,high,low,46784,0.843,0.05,0.464,0.38,0.244006588
+North Dakota,low,low,60730,0.901,0.03,0.433,0.15,N/A
+Ohio,low,low,49644,0.876,0.03,0.452,0.21,0.190713964
+Oklahoma,low,low,47199,0.856,0.04,0.454,0.35,0.133629099
+Oregon,high,high,58875,0.891,0.07,0.449,0.26,0.832849608
+Pennsylvania,high,high,55173,0.879,0.03,0.461,0.24,0.285101092
+Rhode Island,high,high,58633,0.847,0.08,0.467,0.28,0.095401641
+South Carolina,high,low,44929,0.836,0.03,0.461,0.36,0.209894423
+South Dakota,low,low,53053,0.899,,0.442,0.17,N/A
+Tennessee,high,high,43716,0.831,0.04,0.468,0.27,0.19993848
+Texas,low,high,53875,0.799,0.11,0.469,0.56,0.213583938
+Utah,low,high,63383,0.904,0.04,0.419,0.19,0.136546733
+Vermont,low,low,60708,0.91,0.01,0.444,0.06,0.324149109
+Virginia,low,high,66155,0.866,0.06,0.459,0.38,0.363248898
+Washington,high,high,59068,0.897,0.08,0.441,0.31,0.67748765
+West Virginia,high,low,39552,0.828,0.01,0.451,0.07,0.328677075
+Wisconsin,low,low,58080,0.898,0.03,0.43,0.22,0.226197105
+Wyoming,low,low,55690,0.918,0.02,0.423,0.15,N/A
