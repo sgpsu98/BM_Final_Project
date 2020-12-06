@@ -1,0 +1,82 @@
+---
+title: "P8130 Final Project"
+author: "Pengyuan Su (ps3195), Shuhong Xiang (sx2289), Yali Zhai (yz3959), Zhixing Wu (zw2709)"
+date: "12/6/2020"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(viridis)
+library(purrr)
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	warning = FALSE,
+	fig.width = 8, 
+  fig.height = 6,
+  out.width = "90%"
+)
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+```
+
+
+```{r load_libraries}
+library(tidyverse)
+library(modelr)
+library(mgcv)
+```
+
+# Introduction
+
+
+
+# Abstract 
+
+
+
+# Data Analysis
+
+```{r import data}
+hc_df = 
+  read_csv(here::here("data/HateCrimes.csv")) %>% 
+  janitor::clean_names() %>% 
+  mutate(hate_crimes_per_100k_splc = as.numeric(hate_crimes_per_100k_splc)) %>% 
+  drop_na()
+
+head(hc_df)
+```
+
+
+```{r}
+hc_df %>% 
+  ggplot(aes(x = hate_crimes_per_100k_splc, y = ..density..)) +
+  geom_histogram(fill = "blue", alpha = .4) +
+  geom_density(aes( hate_crimes_per_100k_splc, y = ..density..)) +
+  theme_bw() +
+  labs(title = "Distribution for hate crimes per 100k",
+       x = "hate crimes per 100k splc",
+       y = " Count") +
+  theme(plot.title = element_text(hjust = .5 ))
+
+
+hc_df %>% 
+  mutate(lg = log(hate_crimes_per_100k_splc)) %>% 
+  ggplot(aes(x = lg, y = ..density..)) +
+  geom_histogram(fill = "blue", alpha = .4) +
+  geom_density(aes( lg, y = ..density..)) +
+  theme_bw() +
+  labs(title = "Distribution for Log ",
+       x = "Log (hate crimes per 100k splc)",
+       y = " Count") +
+  theme(plot.title = element_text(hjust = .5 ))
+
+
+```
+
