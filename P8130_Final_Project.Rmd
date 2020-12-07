@@ -73,6 +73,7 @@ hc_df =
 head(hc_df)
 ```
 
+## Plot distribution of hate crimes rate
 
 ```{r plot distribution of rate}
 hc_df %>% 

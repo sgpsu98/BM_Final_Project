@@ -82,6 +82,8 @@ head(hc_df)
     ## 6 Colo~ low          high              60940       0.893        0.06      0.457
     ## # ... with 2 more variables: non_white <dbl>, rate <dbl>
 
+## Plot distribution of hate crimes rate
+
 ``` r
 hc_df %>% 
   ggplot(aes(x = rate, y = ..density..)) +
