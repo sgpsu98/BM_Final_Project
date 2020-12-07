@@ -43,22 +43,42 @@ library(mgcv)
 
 # Data Analysis
 
+
+## Tidy:
+
+`rate`: hate_crimes_per_100k_splc
+
+`med_income`: median_household_income
+
+`high_degree`: perc_population_with_high_school_degree
+
+`non_citizen`: perc_non_citizen
+
+`non_white`: perc_non_white
+
+
 ```{r import data}
 hc_df = 
   read_csv(here::here("data/HateCrimes.csv")) %>% 
   janitor::clean_names() %>% 
   mutate(hate_crimes_per_100k_splc = as.numeric(hate_crimes_per_100k_splc)) %>% 
-  drop_na()
+  drop_na() %>% 
+  rename(., 
+         rate = hate_crimes_per_100k_splc, 
+         med_income = median_household_income, 
+         high_degree = perc_population_with_high_school_degree, 
+         non_citizen = perc_non_citizen, 
+         non_white = perc_non_white)
 
 head(hc_df)
 ```
 
 
-```{r}
+```{r plot distribution of rate}
 hc_df %>% 
-  ggplot(aes(x = hate_crimes_per_100k_splc, y = ..density..)) +
+  ggplot(aes(x = rate, y = ..density..)) +
   geom_histogram(fill = "blue", alpha = .4) +
-  geom_density(aes( hate_crimes_per_100k_splc, y = ..density..)) +
+  geom_density(aes( x = rate, y = ..density..)) +
   theme_bw() +
   labs(title = "Distribution for hate crimes per 100k",
        x = "hate crimes per 100k splc",
@@ -67,7 +87,7 @@ hc_df %>%
 
 
 hc_df %>% 
-  mutate(lg = log(hate_crimes_per_100k_splc)) %>% 
+  mutate(lg = log(rate)) %>% 
   ggplot(aes(x = lg, y = ..density..)) +
   geom_histogram(fill = "blue", alpha = .4) +
   geom_density(aes( lg, y = ..density..)) +
@@ -79,4 +99,6 @@ hc_df %>%
 
 
 ```
+
+
 
