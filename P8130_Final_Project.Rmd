@@ -30,7 +30,12 @@ theme_set(theme_minimal() + theme(legend.position = "bottom"))
 ```{r load_libraries}
 library(tidyverse)
 library(modelr)
+library(arsenal)
+library(broom)
+library(modelr)
+library(patchwork)
 library(mgcv)
+library(faraway)
 ```
 
 # Introduction
@@ -73,6 +78,30 @@ hc_df =
 head(hc_df)
 ```
 
+Description by table?
+
+```{r}
+my_controls <- tableby.control(
+               total = T, # do you wanna show he overall col?
+               test=F,  # No test p-values yet
+               numeric.stats = c("meansd", "medianq1q3", "range", "Nmiss2"), # for the continuous var. (a.k.a numeric var.) 
+               cat.stats = c("countpct", "Nmiss2"), # for categorical var., we select the count, percentage, and missing values.
+               stats.labels = list(
+               meansd = "Mean (SD)",
+               medianq1q3 = "Median (Q1, Q3)",
+               range = "Min - Max",
+               Nmiss2 = "Missing",
+               countpct = "N (%)"))
+
+
+
+
+
+#summary(tab1, title = "Descriptive statistics ", text = T,  digits = 1) %>%  knitr::kable()   
+```
+
+
+
 ## Plot distribution of hate crimes rate
 
 ```{r plot distribution of rate}
@@ -101,5 +130,63 @@ hc_df %>%
 
 ```
 
+## Verify association
+
+**income**
+
+```{r}
+income = 
+ lm(rate ~ med_income, data = hc_df)
+
+summary(income)
+```
+
+
+**high school degree**
+
+```{r}
+degree = 
+ lm(rate ~ high_degree, data = hc_df)
+
+summary(degree)
+```
+
+**non citizen**
+
+```{r}
+noncitizen = 
+ lm(rate ~ non_citizen, data = hc_df)
+
+summary(noncitizen)
+```
+
+
+**non white**
+
+```{r}
+nonwhite = 
+ lm(rate ~ non_white, data = hc_df)
+
+summary(nonwhite)
+```
+
+**gini index**
+
+```{r}
+gini = 
+ lm(rate ~ gini_index, data = hc_df)
+
+summary(gini)
+```
+
+## MLR
+
+```{r}
+#mult.fit = lm(rate ~ ., data = hc_df)
+#step(mult.fit, direction='backward')
+
+#Error in step(mult.fit, direction = "backward") : 
+  #AIC is -infinity for this model, so 'step' cannot proceed
+```
 
 
