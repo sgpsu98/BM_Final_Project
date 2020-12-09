@@ -246,8 +246,18 @@ reg_all = lm(rate ~ med_income + high_degree + non_citizen + gini_index + non_wh
 
 ```{r}
 
- mult.fit <- lm(rate ~ ., data = modified_df)
- step(mult.fit, direction = 'backward')
+hc_df$unemployment <-ifelse(hc_df$unemployment=="high",1,ifelse(hc_df$unemployment=="low", 0, NA))
+
+hc_df$urbanization <-ifelse(hc_df$urbanization=="high",1,ifelse(hc_df$urbanization=="low", 0, NA))
+
+hc_df = 
+  hc_df %>% 
+  select(-state)  
+
+model =  
+  lm(rate ~ ., data = hc_df) 
+
+ step(model, direction = 'backward')
 
 ```
 

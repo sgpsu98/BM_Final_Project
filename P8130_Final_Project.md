@@ -67,6 +67,33 @@ education status, like the high-school degree in this study, will lead
 to an occupation with a higher salary, which can increase the medians of
 household income and decrease unemployment.
 
+Hate crime, according to website information
+(<https://hatecrime.campaign.gov.uk/>), is regarded as the criminal
+offence motivated by hostility or prejudice of others’ some
+characteristics, including race, religion, sexual orientation,
+transgender identity, disability. And our project mainly emphasizes on
+the possible variables which might have close relation with the hate
+crime rate.
+
+The race consideration might become the most common cause of hate crime.
+Based on the statistics provided
+(<https://law.jrank.org/pages/12135/Race-Ethnicity-Hate-Crimes.html> ),
+hate crimes resulting from race were about 49 percent in 2002 and 67
+percent of victims attacked for racial problems were black Americans.
+
+It is pointed out in this
+article(<https://www.assignmentpoint.com/arts/social-science/the-role-of-urbanization-in-increasing-crime-in-urban-area-2.html>)
+that the crime and urbanization seem to be correlated in terms of
+sociological aspects since it have be linked between criminal cases and
+the socio-economic development levels.
+
+<https://safer-america.com/map-of-reported-hate-crimes-in-the-u-s-a/>
+According to the Uniform Crime Reporting Program’s Hate Crime Statistics
+Program, all the hate crimes reported to the FBI in 2017 of all the
+states except Hawaii were shown, and the Pennsylvania had 1488 cases and
+ranked the first. While in terms of the Hate Crimes per 100,000, the
+District of Columbia had the largest figure of 27.81.
+
 # Data Analysis
 
 ## Tidy:
@@ -95,7 +122,8 @@ hc_df =
          non_white = perc_non_white)
 ```
 
-    ## Parsed with column specification:
+    ## 
+    ## -- Column specification --------------------------------------------------------
     ## cols(
     ##   state = col_character(),
     ##   unemployment = col_character(),
@@ -115,13 +143,13 @@ head(hc_df)
     ## # A tibble: 6 x 9
     ##   state unemployment urbanization med_income high_degree non_citizen gini_index
     ##   <chr> <chr>        <chr>             <dbl>       <dbl>       <dbl>      <dbl>
-    ## 1 Alab… high         low               42278       0.821        0.02      0.472
-    ## 2 Alas… high         low               67629       0.914        0.04      0.422
-    ## 3 Ariz… high         high              49254       0.842        0.1       0.455
-    ## 4 Arka… high         low               44922       0.824        0.04      0.458
-    ## 5 Cali… high         high              60487       0.806        0.13      0.471
-    ## 6 Colo… low          high              60940       0.893        0.06      0.457
-    ## # … with 2 more variables: non_white <dbl>, rate <dbl>
+    ## 1 Alab~ high         low               42278       0.821        0.02      0.472
+    ## 2 Alas~ high         low               67629       0.914        0.04      0.422
+    ## 3 Ariz~ high         high              49254       0.842        0.1       0.455
+    ## 4 Arka~ high         low               44922       0.824        0.04      0.458
+    ## 5 Cali~ high         high              60487       0.806        0.13      0.471
+    ## 6 Colo~ low          high              60940       0.893        0.06      0.457
+    ## # ... with 2 more variables: non_white <dbl>, rate <dbl>
 
 Description by table?
 
@@ -403,8 +431,18 @@ reg_all = lm(rate ~ med_income + high_degree + non_citizen + gini_index + non_wh
 ## stepwise
 
 ``` r
- mult.fit <- lm(rate ~ ., data = modified_df)
- step(mult.fit, direction = 'backward')
+hc_df$unemployment <-ifelse(hc_df$unemployment=="high",1,ifelse(hc_df$unemployment=="low", 0, NA))
+
+hc_df$urbanization <-ifelse(hc_df$urbanization=="high",1,ifelse(hc_df$urbanization=="low", 0, NA))
+
+hc_df = 
+  hc_df %>% 
+  select(-state)  
+
+model =  
+  lm(rate ~ ., data = hc_df) 
+
+ step(model, direction = 'backward')
 ```
 
     ## Start:  AIC=-137.03
@@ -475,7 +513,7 @@ reg_all = lm(rate ~ med_income + high_degree + non_citizen + gini_index + non_wh
 
     ## 
     ## Call:
-    ## lm(formula = rate ~ high_degree + gini_index, data = modified_df)
+    ## lm(formula = rate ~ high_degree + gini_index, data = hc_df)
     ## 
     ## Coefficients:
     ## (Intercept)  high_degree   gini_index  
