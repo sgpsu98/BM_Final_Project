@@ -387,29 +387,6 @@ reg_all = lm(rate ~ med_income + high_degree + non_citizen + gini_index + non_wh
 ## stepwise
 
 ``` r
-modified_df  %>% 
-  mutate(
-    unemployment = as.factor(unemployment),
-    urbanization = as.factor(urbanization)
-  )
-```
-
-    ## # A tibble: 45 x 8
-    ##    unemployment urbanization med_income high_degree non_citizen gini_index
-    ##    <fct>        <fct>             <dbl>       <dbl>       <dbl>      <dbl>
-    ##  1 high         low               42278       0.821        0.02      0.472
-    ##  2 high         low               67629       0.914        0.04      0.422
-    ##  3 high         high              49254       0.842        0.1       0.455
-    ##  4 high         low               44922       0.824        0.04      0.458
-    ##  5 high         high              60487       0.806        0.13      0.471
-    ##  6 low          high              60940       0.893        0.06      0.457
-    ##  7 high         high              70161       0.886        0.06      0.486
-    ##  8 low          high              57522       0.874        0.05      0.44 
-    ##  9 high         high              68277       0.871        0.11      0.532
-    ## 10 high         high              46140       0.853        0.09      0.474
-    ## # ... with 35 more rows, and 2 more variables: non_white <dbl>, rate <dbl>
-
-``` r
  mult.fit <- lm(rate ~ ., data = modified_df)
  step(mult.fit, direction = 'backward')
 ```

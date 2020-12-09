@@ -221,11 +221,6 @@ reg_all = lm(rate ~ med_income + high_degree + non_citizen + gini_index + non_wh
 ## stepwise
 
 ```{r}
-modified_df  %>% 
-  mutate(
-    unemployment = as.factor(unemployment),
-    urbanization = as.factor(urbanization)
-  )
 
  mult.fit <- lm(rate ~ ., data = modified_df)
  step(mult.fit, direction = 'backward')
