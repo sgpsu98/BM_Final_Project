@@ -39,13 +39,11 @@ library(faraway)
 library(skimr)
 ```
 
-# Introduction
-
-
-
 # Abstract 
 
 
+# Introduction
+Hate crime is a significant issue under the present circumstances. There exist multiple variables related to hate crime. In this project, we intend to find the relationships between the hate crime rate and the eight variables. Among the eight variables, income status is about unemployment level, medians of household income, and Gini index in the dataset. Especially, the Gini index is a measure of the distribution of income across a population developed by the Italian statistician Corrado Gini in 1912. [1] In real life, the high-valued Gini index implies the high levels of inequality in the whole society. Also, the high unemployment rate will lower the medians of household income. People without employment are more likely to participate in hate crime. [2] Besides, the education level matters in income status. A higher level of education status, like the high-school degree in this study, will lead to an occupation with a higher salary, which can increase the medians of household income and decrease unemployment. 
 
 # Data Analysis
 

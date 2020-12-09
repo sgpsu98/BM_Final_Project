@@ -47,9 +47,25 @@ library(faraway)
 library(skimr)
 ```
 
+# Abstract
+
 # Introduction
 
-# Abstract
+Hate crime is a significant issue under the present circumstances. There
+exist multiple variables related to hate crime. In this project, we
+intend to find the relationships between the hate crime rate and the
+eight variables. Among the eight variables, income status is about
+unemployment level, medians of household income, and Gini index in the
+dataset. Especially, the Gini index is a measure of the distribution of
+income across a population developed by the Italian statistician Corrado
+Gini in 1912. \[1\] In real life, the high-valued Gini index implies the
+high levels of inequality in the whole society. Also, the high
+unemployment rate will lower the medians of household income. People
+without employment are more likely to participate in hate crime. \[2\]
+Besides, the education level matters in income status. A higher level of
+education status, like the high-school degree in this study, will lead
+to an occupation with a higher salary, which can increase the medians of
+household income and decrease unemployment.
 
 # Data Analysis
 
@@ -99,13 +115,13 @@ head(hc_df)
     ## # A tibble: 6 x 9
     ##   state unemployment urbanization med_income high_degree non_citizen gini_index
     ##   <chr> <chr>        <chr>             <dbl>       <dbl>       <dbl>      <dbl>
-    ## 1 Alab~ high         low               42278       0.821        0.02      0.472
-    ## 2 Alas~ high         low               67629       0.914        0.04      0.422
-    ## 3 Ariz~ high         high              49254       0.842        0.1       0.455
-    ## 4 Arka~ high         low               44922       0.824        0.04      0.458
-    ## 5 Cali~ high         high              60487       0.806        0.13      0.471
-    ## 6 Colo~ low          high              60940       0.893        0.06      0.457
-    ## # ... with 2 more variables: non_white <dbl>, rate <dbl>
+    ## 1 Alab… high         low               42278       0.821        0.02      0.472
+    ## 2 Alas… high         low               67629       0.914        0.04      0.422
+    ## 3 Ariz… high         high              49254       0.842        0.1       0.455
+    ## 4 Arka… high         low               44922       0.824        0.04      0.458
+    ## 5 Cali… high         high              60487       0.806        0.13      0.471
+    ## 6 Colo… low          high              60940       0.893        0.06      0.457
+    ## # … with 2 more variables: non_white <dbl>, rate <dbl>
 
 Description by table?
 
