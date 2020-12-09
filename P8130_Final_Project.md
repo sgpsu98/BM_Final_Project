@@ -44,6 +44,7 @@ library(mgcv)
 
 ``` r
 library(faraway)
+library(skimr)
 ```
 
 # Introduction
@@ -78,8 +79,7 @@ hc_df =
          non_white = perc_non_white)
 ```
 
-    ## 
-    ## -- Column specification --------------------------------------------------------
+    ## Parsed with column specification:
     ## cols(
     ##   state = col_character(),
     ##   unemployment = col_character(),
@@ -123,7 +123,7 @@ my_controls <- tableby.control(
                countpct = "N (%)"))
 
 
-
+## or use skim()
 
 
 #summary(tab1, title = "Descriptive statistics ", text = T,  digits = 1) %>%  knitr::kable()   
@@ -315,3 +315,398 @@ summary(gini)
 #Error in step(mult.fit, direction = "backward") : 
   #AIC is -infinity for this model, so 'step' cannot proceed
 ```
+
+## Correlation
+
+``` r
+modified_df = 
+  hc_df %>% 
+  select(-state) %>% 
+  mutate(
+    unemployment = as.factor(unemployment),
+    urbanization = as.factor(urbanization)
+  )
+
+modified_df %>% 
+   mutate(
+    unemployment = as.numeric(unemployment),
+    urbanization = as.numeric(urbanization)
+  ) %>% cor() %>% round(., 2)
+```
+
+    ##              unemployment urbanization med_income high_degree non_citizen
+    ## unemployment         1.00         0.24       0.25        0.45       -0.24
+    ## urbanization         0.24         1.00      -0.26        0.16       -0.68
+    ## med_income           0.25        -0.26       1.00        0.65        0.30
+    ## high_degree          0.45         0.16       0.65        1.00       -0.26
+    ## non_citizen         -0.24        -0.68       0.30       -0.26        1.00
+    ## gini_index          -0.41        -0.43      -0.13       -0.54        0.48
+    ## non_white           -0.43        -0.51       0.04       -0.50        0.75
+    ## rate                 0.02        -0.21       0.34        0.26        0.24
+    ##              gini_index non_white  rate
+    ## unemployment      -0.41     -0.43  0.02
+    ## urbanization      -0.43     -0.51 -0.21
+    ## med_income        -0.13      0.04  0.34
+    ## high_degree       -0.54     -0.50  0.26
+    ## non_citizen        0.48      0.75  0.24
+    ## gini_index         1.00      0.55  0.38
+    ## non_white          0.55      1.00  0.11
+    ## rate               0.38      0.11  1.00
+
+## regression of all numeric variables
+
+``` r
+reg_all = lm(rate ~ med_income + high_degree + non_citizen + gini_index + non_white, data = modified_df)
+ summary(reg_all)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = rate ~ med_income + high_degree + non_citizen + 
+    ##     gini_index + non_white, data = modified_df)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -0.36737 -0.10005 -0.01877  0.09497  0.52855 
+    ## 
+    ## Coefficients:
+    ##               Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept) -8.170e+00  1.841e+00  -4.437 7.25e-05 ***
+    ## med_income  -1.589e-06  5.773e-06  -0.275  0.78461    
+    ## high_degree  5.399e+00  1.788e+00   3.020  0.00444 ** 
+    ## non_citizen  9.374e-01  1.643e+00   0.571  0.57154    
+    ## gini_index   8.417e+00  1.873e+00   4.495 6.08e-05 ***
+    ## non_white   -1.723e-02  3.485e-01  -0.049  0.96082    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.1967 on 39 degrees of freedom
+    ## Multiple R-squared:  0.458,  Adjusted R-squared:  0.3885 
+    ## F-statistic: 6.592 on 5 and 39 DF,  p-value: 0.0001558
+
+## stepwise
+
+``` r
+modified_df  %>% 
+  mutate(
+    unemployment = as.factor(unemployment),
+    urbanization = as.factor(urbanization)
+  )
+```
+
+    ## # A tibble: 45 x 8
+    ##    unemployment urbanization med_income high_degree non_citizen gini_index
+    ##    <fct>        <fct>             <dbl>       <dbl>       <dbl>      <dbl>
+    ##  1 high         low               42278       0.821        0.02      0.472
+    ##  2 high         low               67629       0.914        0.04      0.422
+    ##  3 high         high              49254       0.842        0.1       0.455
+    ##  4 high         low               44922       0.824        0.04      0.458
+    ##  5 high         high              60487       0.806        0.13      0.471
+    ##  6 low          high              60940       0.893        0.06      0.457
+    ##  7 high         high              70161       0.886        0.06      0.486
+    ##  8 low          high              57522       0.874        0.05      0.44 
+    ##  9 high         high              68277       0.871        0.11      0.532
+    ## 10 high         high              46140       0.853        0.09      0.474
+    ## # ... with 35 more rows, and 2 more variables: non_white <dbl>, rate <dbl>
+
+``` r
+ mult.fit <- lm(rate ~ ., data = modified_df)
+ step(mult.fit, direction = 'backward')
+```
+
+    ## Start:  AIC=-137.03
+    ## rate ~ unemployment + urbanization + med_income + high_degree + 
+    ##     non_citizen + gini_index + non_white
+    ## 
+    ##                Df Sum of Sq    RSS     AIC
+    ## - non_white     1   0.00001 1.5008 -139.03
+    ## - unemployment  1   0.00135 1.5021 -138.99
+    ## - med_income    1   0.00258 1.5034 -138.95
+    ## - urbanization  1   0.00618 1.5070 -138.85
+    ## - non_citizen   1   0.01750 1.5183 -138.51
+    ## <none>                      1.5008 -137.03
+    ## - high_degree   1   0.34889 1.8497 -129.62
+    ## - gini_index    1   0.77465 2.2754 -120.30
+    ## 
+    ## Step:  AIC=-139.03
+    ## rate ~ unemployment + urbanization + med_income + high_degree + 
+    ##     non_citizen + gini_index
+    ## 
+    ##                Df Sum of Sq    RSS     AIC
+    ## - unemployment  1   0.00148 1.5023 -140.99
+    ## - med_income    1   0.00269 1.5035 -140.95
+    ## - urbanization  1   0.00617 1.5070 -140.85
+    ## - non_citizen   1   0.02422 1.5250 -140.31
+    ## <none>                      1.5008 -139.03
+    ## - high_degree   1   0.38759 1.8884 -130.69
+    ## - gini_index    1   0.77888 2.2797 -122.22
+    ## 
+    ## Step:  AIC=-140.99
+    ## rate ~ urbanization + med_income + high_degree + non_citizen + 
+    ##     gini_index
+    ## 
+    ##                Df Sum of Sq    RSS     AIC
+    ## - med_income    1   0.00243 1.5047 -142.91
+    ## - urbanization  1   0.00693 1.5092 -142.78
+    ## - non_citizen   1   0.02401 1.5263 -142.27
+    ## <none>                      1.5023 -140.99
+    ## - high_degree   1   0.40517 1.9074 -132.24
+    ## - gini_index    1   0.78876 2.2910 -124.00
+    ## 
+    ## Step:  AIC=-142.91
+    ## rate ~ urbanization + high_degree + non_citizen + gini_index
+    ## 
+    ##                Df Sum of Sq    RSS     AIC
+    ## - urbanization  1   0.00762 1.5123 -144.69
+    ## - non_citizen   1   0.02232 1.5270 -144.25
+    ## <none>                      1.5047 -142.91
+    ## - gini_index    1   0.78737 2.2921 -125.97
+    ## - high_degree   1   0.86254 2.3672 -124.52
+    ## 
+    ## Step:  AIC=-144.69
+    ## rate ~ high_degree + non_citizen + gini_index
+    ## 
+    ##               Df Sum of Sq    RSS     AIC
+    ## - non_citizen  1   0.01471 1.5270 -146.25
+    ## <none>                     1.5123 -144.69
+    ## - gini_index   1   0.78804 2.3004 -127.81
+    ## - high_degree  1   0.85561 2.3679 -126.51
+    ## 
+    ## Step:  AIC=-146.25
+    ## rate ~ high_degree + gini_index
+    ## 
+    ##               Df Sum of Sq    RSS     AIC
+    ## <none>                     1.5270 -146.25
+    ## - high_degree  1   0.85432 2.3813 -128.25
+    ## - gini_index   1   1.06513 2.5922 -124.44
+
+    ## 
+    ## Call:
+    ## lm(formula = rate ~ high_degree + gini_index, data = modified_df)
+    ## 
+    ## Coefficients:
+    ## (Intercept)  high_degree   gini_index  
+    ##      -8.103        5.059        8.825
+
+## Forward
+
+``` r
+# step1
+fit1 <- lm(rate ~ unemployment, data = modified_df)
+tidy(fit1)
+```
+
+    ## # A tibble: 2 x 5
+    ##   term            estimate std.error statistic    p.value
+    ##   <chr>              <dbl>     <dbl>     <dbl>      <dbl>
+    ## 1 (Intercept)      0.298      0.0531     5.62  0.00000128
+    ## 2 unemploymentlow  0.00825    0.0759     0.109 0.914
+
+``` r
+fit2 <- lm(rate ~ urbanization, data = modified_df)
+tidy(fit2)
+```
+
+    ## # A tibble: 2 x 5
+    ##   term            estimate std.error statistic      p.value
+    ##   <chr>              <dbl>     <dbl>     <dbl>        <dbl>
+    ## 1 (Intercept)        0.352    0.0508      6.93 0.0000000161
+    ## 2 urbanizationlow   -0.106    0.0743     -1.43 0.161
+
+``` r
+fit3 <- lm(rate ~ med_income, data = modified_df)
+tidy(fit3)
+```
+
+    ## # A tibble: 2 x 5
+    ##   term           estimate  std.error statistic p.value
+    ##   <chr>             <dbl>      <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept) -0.230      0.225          -1.02  0.311 
+    ## 2 med_income   0.00000963 0.00000401      2.40  0.0208
+
+``` r
+fit4 <- lm(rate ~ high_degree, data = modified_df)
+tidy(fit4)
+```
+
+    ## # A tibble: 2 x 5
+    ##   term        estimate std.error statistic p.value
+    ##   <chr>          <dbl>     <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept)    -1.45     0.983     -1.48  0.147 
+    ## 2 high_degree     2.02     1.13       1.79  0.0811
+
+``` r
+fit5 <- lm(rate ~ non_citizen, data = modified_df)
+tidy(fit5)
+```
+
+    ## # A tibble: 2 x 5
+    ##   term        estimate std.error statistic p.value
+    ##   <chr>          <dbl>     <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept)    0.194    0.0755      2.57  0.0138
+    ## 2 non_citizen    1.96     1.19        1.65  0.107
+
+``` r
+fit6 <- lm(rate ~ gini_index, data = modified_df)
+tidy(fit6)
+```
+
+    ## # A tibble: 2 x 5
+    ##   term        estimate std.error statistic p.value
+    ##   <chr>          <dbl>     <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept)    -1.78     0.774     -2.30 0.0261 
+    ## 2 gini_index      4.58     1.70       2.70 0.00992
+
+``` r
+fit7 <- lm(rate ~ non_white, data = modified_df)
+tidy(fit7)
+```
+
+    ## # A tibble: 2 x 5
+    ##   term        estimate std.error statistic p.value
+    ##   <chr>          <dbl>     <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept)    0.243    0.0897     2.70  0.00975
+    ## 2 non_white      0.188    0.256      0.734 0.467
+
+``` r
+forward1 = lm(rate ~ gini_index, data = modified_df)
+
+# step 2
+fit1 <- update(forward1, . ~ . +unemployment)
+tidy(fit1)
+```
+
+    ## # A tibble: 3 x 5
+    ##   term            estimate std.error statistic p.value
+    ##   <chr>              <dbl>     <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept)       -2.30     0.856      -2.68 0.0103 
+    ## 2 gini_index         5.60     1.84        3.04 0.00408
+    ## 3 unemploymentlow    0.103    0.0762      1.35 0.184
+
+``` r
+fit2 <- update(forward1, . ~ . +urbanization)
+tidy(fit2)
+```
+
+    ## # A tibble: 3 x 5
+    ##   term            estimate std.error statistic p.value
+    ##   <chr>              <dbl>     <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept)      -1.63      0.882     -1.85   0.0719
+    ## 2 gini_index        4.27      1.90       2.25   0.0299
+    ## 3 urbanizationlow  -0.0299    0.0787    -0.380  0.706
+
+``` r
+fit3 <- update(forward1, . ~ . +med_income)
+tidy(fit3)
+```
+
+    ## # A tibble: 3 x 5
+    ##   term          estimate  std.error statistic p.value
+    ##   <chr>            <dbl>      <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept) -2.69      0.766          -3.51 0.00109
+    ## 2 gini_index   5.20      1.56            3.32 0.00184
+    ## 3 med_income   0.0000112 0.00000364      3.07 0.00369
+
+``` r
+fit4 <- update(forward1, . ~ . +high_degree)
+tidy(fit4)
+```
+
+    ## # A tibble: 3 x 5
+    ##   term        estimate std.error statistic    p.value
+    ##   <chr>          <dbl>     <dbl>     <dbl>      <dbl>
+    ## 1 (Intercept)    -8.10      1.45     -5.60 0.00000148
+    ## 2 gini_index      8.82      1.63      5.41 0.00000276
+    ## 3 high_degree     5.06      1.04      4.85 0.0000174
+
+``` r
+fit5 <- update(forward1, . ~ . +non_citizen)
+tidy(fit5)
+```
+
+    ## # A tibble: 3 x 5
+    ##   term        estimate std.error statistic p.value
+    ##   <chr>          <dbl>     <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept)   -1.61      0.858    -1.88   0.0673
+    ## 2 gini_index     4.12      1.95      2.11   0.0407
+    ## 3 non_citizen    0.637     1.31      0.488  0.628
+
+``` r
+fit6 <- update(forward1, . ~ . +non_white)
+tidy(fit6)
+```
+
+    ## # A tibble: 3 x 5
+    ##   term        estimate std.error statistic p.value
+    ##   <chr>          <dbl>     <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept)   -2.13      0.883    -2.41  0.0203 
+    ## 2 gini_index     5.50      2.04      2.70  0.00997
+    ## 3 non_white     -0.236     0.286    -0.824 0.415
+
+``` r
+forward2 = update(forward1, . ~ . +high_degree)
+
+#step 3
+fit1 <- update(forward2, . ~ . +unemployment)
+tidy(fit1)
+```
+
+    ## # A tibble: 4 x 5
+    ##   term            estimate std.error statistic    p.value
+    ##   <chr>              <dbl>     <dbl>     <dbl>      <dbl>
+    ## 1 (Intercept)      -8.09      1.47      -5.52  0.00000211
+    ## 2 gini_index        8.90      1.69       5.26  0.00000483
+    ## 3 high_degree       4.99      1.11       4.51  0.0000536 
+    ## 4 unemploymentlow   0.0126    0.0661     0.191 0.849
+
+``` r
+fit2 <- update(forward2, . ~ . +urbanization)
+tidy(fit2)
+```
+
+    ## # A tibble: 4 x 5
+    ##   term            estimate std.error statistic    p.value
+    ##   <chr>              <dbl>     <dbl>     <dbl>      <dbl>
+    ## 1 (Intercept)     -8.09       1.53     -5.28   0.00000459
+    ## 2 gini_index       8.81       1.81      4.86   0.0000175 
+    ## 3 high_degree      5.06       1.06      4.77   0.0000237 
+    ## 4 urbanizationlow -0.00111    0.0642   -0.0174 0.986
+
+``` r
+fit3 <- update(forward2, . ~ . +med_income)
+tidy(fit3)
+```
+
+    ## # A tibble: 4 x 5
+    ##   term            estimate  std.error statistic   p.value
+    ##   <chr>              <dbl>      <dbl>     <dbl>     <dbl>
+    ## 1 (Intercept) -7.98        1.72          -4.63  0.0000365
+    ## 2 gini_index   8.74        1.76           4.98  0.0000121
+    ## 3 high_degree  4.92        1.47           3.35  0.00175  
+    ## 4 med_income   0.000000616 0.00000455     0.135 0.893
+
+``` r
+fit4 <- update(forward2, . ~ . +non_citizen)
+tidy(fit4)
+```
+
+    ## # A tibble: 4 x 5
+    ##   term        estimate std.error statistic    p.value
+    ##   <chr>          <dbl>     <dbl>     <dbl>      <dbl>
+    ## 1 (Intercept)   -7.93       1.48    -5.34  0.00000370
+    ## 2 gini_index     8.35       1.81     4.62  0.0000375 
+    ## 3 high_degree    5.06       1.05     4.82  0.0000202 
+    ## 4 non_citizen    0.667      1.06     0.631 0.531
+
+``` r
+fit5 <- update(forward2, . ~ . +non_white)
+tidy(fit5)
+```
+
+    ## # A tibble: 4 x 5
+    ##   term        estimate std.error statistic    p.value
+    ##   <chr>          <dbl>     <dbl>     <dbl>      <dbl>
+    ## 1 (Intercept)  -8.12       1.46     -5.55  0.00000188
+    ## 2 gini_index    8.57       1.79      4.80  0.0000213 
+    ## 3 high_degree   5.18       1.10      4.71  0.0000288 
+    ## 4 non_white     0.0914     0.244     0.375 0.710

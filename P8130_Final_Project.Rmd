@@ -36,6 +36,7 @@ library(modelr)
 library(patchwork)
 library(mgcv)
 library(faraway)
+library(skimr)
 ```
 
 # Introduction
@@ -94,7 +95,7 @@ my_controls <- tableby.control(
                countpct = "N (%)"))
 
 
-
+## or use skim()
 
 
 #summary(tab1, title = "Descriptive statistics ", text = T,  digits = 1) %>%  knitr::kable()   
@@ -179,6 +180,7 @@ gini =
 summary(gini)
 ```
 
+
 ## MLR
 
 ```{r}
@@ -189,4 +191,96 @@ summary(gini)
   #AIC is -infinity for this model, so 'step' cannot proceed
 ```
 
+
+## Correlation
+
+```{r}
+modified_df = 
+  hc_df %>% 
+  select(-state) %>% 
+  mutate(
+    unemployment = as.factor(unemployment),
+    urbanization = as.factor(urbanization)
+  )
+
+modified_df %>% 
+   mutate(
+    unemployment = as.numeric(unemployment),
+    urbanization = as.numeric(urbanization)
+  ) %>% cor() %>% round(., 2)
+```
+
+## regression of all numeric variables
+
+```{r}
+reg_all = lm(rate ~ med_income + high_degree + non_citizen + gini_index + non_white, data = modified_df)
+ summary(reg_all)
+```
+
+
+## stepwise
+
+```{r}
+modified_df  %>% 
+  mutate(
+    unemployment = as.factor(unemployment),
+    urbanization = as.factor(urbanization)
+  )
+
+ mult.fit <- lm(rate ~ ., data = modified_df)
+ step(mult.fit, direction = 'backward')
+
+```
+
+## Forward
+
+```{r}
+# step1
+fit1 <- lm(rate ~ unemployment, data = modified_df)
+tidy(fit1)
+fit2 <- lm(rate ~ urbanization, data = modified_df)
+tidy(fit2)
+fit3 <- lm(rate ~ med_income, data = modified_df)
+tidy(fit3)
+fit4 <- lm(rate ~ high_degree, data = modified_df)
+tidy(fit4)
+fit5 <- lm(rate ~ non_citizen, data = modified_df)
+tidy(fit5)
+fit6 <- lm(rate ~ gini_index, data = modified_df)
+tidy(fit6)
+fit7 <- lm(rate ~ non_white, data = modified_df)
+tidy(fit7)
+
+forward1 = lm(rate ~ gini_index, data = modified_df)
+
+# step 2
+fit1 <- update(forward1, . ~ . +unemployment)
+tidy(fit1)
+fit2 <- update(forward1, . ~ . +urbanization)
+tidy(fit2)
+fit3 <- update(forward1, . ~ . +med_income)
+tidy(fit3)
+fit4 <- update(forward1, . ~ . +high_degree)
+tidy(fit4)
+fit5 <- update(forward1, . ~ . +non_citizen)
+tidy(fit5)
+fit6 <- update(forward1, . ~ . +non_white)
+tidy(fit6)
+
+forward2 = update(forward1, . ~ . +high_degree)
+
+#step 3
+fit1 <- update(forward2, . ~ . +unemployment)
+tidy(fit1)
+fit2 <- update(forward2, . ~ . +urbanization)
+tidy(fit2)
+fit3 <- update(forward2, . ~ . +med_income)
+tidy(fit3)
+fit4 <- update(forward2, . ~ . +non_citizen)
+tidy(fit4)
+fit5 <- update(forward2, . ~ . +non_white)
+tidy(fit5)
+
+
+```
 
