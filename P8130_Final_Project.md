@@ -122,8 +122,7 @@ hc_df =
          non_white = perc_non_white)
 ```
 
-    ## 
-    ## -- Column specification --------------------------------------------------------
+    ## Parsed with column specification:
     ## cols(
     ##   state = col_character(),
     ##   unemployment = col_character(),
@@ -192,8 +191,11 @@ hc_df %>%
 <img src="P8130_Final_Project_files/figure-gfm/plot distribution of rate-1.png" width="90%" />
 
 ``` r
-hc_df %>% 
-  mutate(lg = log(rate)) %>% 
+hc_df_log = 
+  hc_df %>% 
+  mutate(lg = log(rate))
+
+hc_df_log%>% 
   ggplot(aes(x = lg, y = ..density..)) +
   geom_histogram(fill = "blue", alpha = .4) +
   geom_density(aes( lg, y = ..density..)) +
@@ -207,6 +209,46 @@ hc_df %>%
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
 <img src="P8130_Final_Project_files/figure-gfm/plot distribution of rate-2.png" width="90%" />
+
+``` r
+# Histogram - notice the severe right skew
+hist(hc_df_log$lg, xlab="log(hate crimes per 100k splc)", freq=T, col=2)
+```
+
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-2-1.png" width="90%" />
+
+``` r
+# Create a quantile-quantile plot (QQplot)
+qqnorm(hc_df_log$lg, col=2, pch=19, cex=1.5)
+
+# Add a straight line which passes through the first and third quartiles.
+qqline(hc_df_log$lg, col = 1,lwd=2,lty=2)
+```
+
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-2-2.png" width="90%" />
+Based on the QQ plot in terms of the log(hate crimes per 100k splc), the
+points are nearly distributed along the straight line, so there is not
+severe departure from the normality.
+
+``` r
+# Perform Shapiro-Wilk test
+shapiro.test(hc_df_log$lg)
+```
+
+    ## 
+    ##  Shapiro-Wilk normality test
+    ## 
+    ## data:  hc_df_log$lg
+    ## W = 0.98308, p-value = 0.7453
+
+H0: the log(hate crimes per 100k splc) is normally distributed H1: the
+log(hate crimes per 100k splc) is not normally distributed
+
+The W test statistic is 0.983 with p value of 0.7453.
+
+Since the p value is greater than 0.05, so we fail to reject the null
+and we could conclude that the log(hate crimes per 100k splc) seems to
+be normally distributed under the significance level of 5%.
 
 ## Verify association
 

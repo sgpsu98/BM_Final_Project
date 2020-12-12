@@ -126,6 +126,27 @@ my_controls <- tableby.control(
 ```
 
 
+### change "unemployment" and "urbanization" from characters to corresponding numbers
+
+use 1 and 2 to denote the level low and high
+
+```{r}
+hc_df = 
+  hc_df %>% 
+  mutate(
+    unemployment_num = case_when(
+      unemployment == "low" ~ 1,
+      unemployment == "high" ~ 2)
+  ) %>% 
+  mutate(
+    urbanization_num = case_when(
+      urbanization == "low" ~ 1,
+      urbanization == "high" ~ 2)
+  ) %>% 
+  select(-unemployment, -urbanization) %>% 
+  select(-state)
+```
+
 
 ## Plot distribution of hate crimes rate
 
@@ -139,10 +160,16 @@ hc_df %>%
        x = "hate crimes per 100k splc",
        y = " Count") +
   theme(plot.title = element_text(hjust = .5 ))
+```
 
 
-hc_df %>% 
+```{r plot distribution of rate}
+hc_df_log = 
+  hc_df %>% 
   mutate(lg = log(rate)) %>% 
+  select(-rate)
+
+hc_df_log%>% 
   ggplot(aes(x = lg, y = ..density..)) +
   geom_histogram(fill = "blue", alpha = .4) +
   geom_density(aes( lg, y = ..density..)) +
@@ -155,6 +182,40 @@ hc_df %>%
 
 ```
 
+```{r}
+# Histogram - notice the severe right skew
+hist(hc_df_log$lg, xlab="log(hate crimes per 100k splc)", freq=T, col=2)
+
+# Create a quantile-quantile plot (QQplot)
+qqnorm(hc_df_log$lg, col=2, pch=19, cex=1.5)
+
+# Add a straight line which passes through the first and third quartiles.
+qqline(hc_df_log$lg, col = 1,lwd=2,lty=2)
+```
+Based on the QQ plot in terms of the log(hate crimes per 100k splc), the points are nearly distributed along the straight line, so there is not severe departure from the normality.
+
+```{r}
+# Perform Shapiro-Wilk test
+shapiro.test(hc_df_log$lg)
+
+```
+
+
+
+H0: the log(hate crimes per 100k splc) is normally distributed
+H1: the log(hate crimes per 100k splc) is not normally distributed
+
+The W test statistic is 0.983 with p value of 0.7453.
+
+Since the p value is greater than 0.05, so we fail to reject the null and we could conclude that the log(hate crimes per 100k splc) seems to be normally distributed under the significance level of 5%.
+
+
+
+
+
+
+
+
 ## Verify association
 
 **income**
@@ -162,8 +223,12 @@ hc_df %>%
 ```{r}
 income = 
  lm(rate ~ med_income, data = hc_df)
-
 summary(income)
+```
+```{r}
+income_ = 
+  lm(lg ~ med_income, data = hc_df_log)
+summary(income_)
 ```
 
 
@@ -175,6 +240,12 @@ degree =
 
 summary(degree)
 ```
+```{r}
+degree_ = 
+ lm(lg ~ high_degree, data = hc_df_log)
+
+summary(degree_)
+```
 
 **non citizen**
 
@@ -183,6 +254,12 @@ noncitizen =
  lm(rate ~ non_citizen, data = hc_df)
 
 summary(noncitizen)
+```
+```{r}
+noncitizen_ = 
+ lm(lg ~ non_citizen, data = hc_df_log)
+
+summary(noncitizen_)
 ```
 
 
@@ -194,6 +271,13 @@ nonwhite =
 
 summary(nonwhite)
 ```
+```{r}
+nonwhite_ = 
+ lm(lg ~ non_white, data = hc_df_log)
+
+summary(nonwhite_)
+```
+
 
 **gini index**
 
@@ -203,18 +287,99 @@ gini =
 
 summary(gini)
 ```
+```{r}
+gini_ = 
+ lm(lg ~ gini_index, data = hc_df_log)
 
+summary(gini_)
+```
+
+**unemployment**
+
+```{r}
+unemployment = 
+ lm(rate ~ unemployment_num, data = hc_df)
+
+summary(unemployment)
+```
+```{r}
+unemployment_ = 
+ lm(lg ~ unemployment_num, data = hc_df_log)
+
+summary(unemployment_)
+```
+
+
+**urbanization**
+
+```{r}
+urbanization = 
+ lm(rate ~ urbanization_num, data = hc_df)
+
+summary(urbanization)
+```
+
+
+```{r}
+urbanization_ = 
+ lm(lg ~ urbanization_num, data = hc_df_log)
+
+summary(urbanization_)
+```
 
 ## MLR
 
 ```{r}
-#mult.fit = lm(rate ~ ., data = hc_df)
-#step(mult.fit, direction='backward')
 
-#Error in step(mult.fit, direction = "backward") : 
-  #AIC is -infinity for this model, so 'step' cannot proceed
+mult.fit = lm(rate ~ ., data = hc_df)
+step(mult.fit, direction='backward')
+
+```
+rate ~ high_degree + gini_index
+
+
+
+```{r}
+
+mult.fit = lm(lg ~ ., data = hc_df_log)
+step(mult.fit, direction='backward')
+
+
+```
+lg ~ high_degree + gini_index
+
+
+```{r}
+# ????
+# three covariates
+# rate ~ income + gini +unemployment
+# log ~  income + degree
+# aic ~ degree +gini
+
+# focus on income + degree + gini and their interaction, maybe adjust for different levels of unemployment
+
+
+
 ```
 
+
+
+
+## interaction
+??
+
+```{r}
+interaction = 
+  lm(rate ~ med_income + high_degree + gini_index + med_income * high_degree + med_income * gini_index + high_degree * gini_index + med_income * high_degree * gini_index, data = hc_df)
+summary(interaction)
+```
+
+
+```{r}
+interaction_ = 
+  lm(lg ~ med_income + high_degree + gini_index + med_income * high_degree + med_income * gini_index + high_degree * gini_index + med_income * high_degree * gini_index, data = hc_df_log)
+summary(interaction_)
+```
 
 ## Correlation
 
