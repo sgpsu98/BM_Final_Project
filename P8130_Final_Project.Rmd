@@ -163,7 +163,7 @@ hc_df %>%
 ```
 
 
-```{r plot distribution of rate}
+```{r plot distribution of rate 2}
 hc_df_log = 
   hc_df %>% 
   mutate(lg = log(rate)) %>% 
@@ -383,10 +383,9 @@ summary(interaction_)
 
 ## Correlation
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 modified_df = 
   hc_df %>% 
-  select(-state) %>% 
   mutate(
     unemployment = as.factor(unemployment),
     urbanization = as.factor(urbanization)
@@ -478,3 +477,86 @@ tidy(fit5)
 
 ```
 
+
+
+# InteractIon check
+
+urbanization & high_degree
+
+```{r}
+##Urbanization -- high_degree
+hc_df %>% 
+  ggplot(aes(x = high_degree, y = rate, color = factor(urbanization_num))) +
+  geom_point() +
+  stat_smooth(method = "lm", se = F)
+```
+
+
+urbanization & gini_index
+
+```{r}
+##Urbanization -- gini
+hc_df %>% 
+  ggplot(aes(x = gini_index, y = rate, color = factor(urbanization_num))) +
+  geom_point() +
+  stat_smooth(method = "lm", se = F)
+
+```
+
+urbanization & income
+
+```{r}
+hc_df %>% 
+  ggplot(aes(x = med_income, y = rate, color = factor(urbanization_num))) +
+  geom_point() +
+  stat_smooth(method = "lm", se = F)
+```
+
+
+unemployment & high_degree
+
+```{r}
+##Unemployment -- high_degree
+hc_df %>% 
+  ggplot(aes(x = high_degree, y = rate, color = factor(unemployment_num))) +
+  geom_point() +
+  stat_smooth(method = "lm", se = F)
+
+```
+
+unemployment & gini
+```{r}
+##Unemployment -- gini
+hc_df %>% 
+  ggplot(aes(x = gini_index, y = rate, color = factor(unemployment_num))) +
+  geom_point() +
+  stat_smooth(method = "lm", se = F)
+
+```
+
+unemployment & income
+
+```{r}
+hc_df %>% 
+  ggplot(aes(x = med_income, y = rate, color = factor(unemployment_num))) +
+  geom_point() +
+  stat_smooth(method = "lm", se = F)
+```
+
+# add interaction to aic model
+
+```{r}
+inter_model_aic = 
+  hc_df %>% 
+  lm(rate ~ high_degree + gini_index + high_degree * urbanization_num + high_degree * unemployment_num + gini_index * urbanization_num + gini_index * unemployment_num, data = .)
+
+summary(inter_model_aic)
+```
+
+```{r}
+inter_model_aic = 
+  hc_df %>% 
+  lm(rate ~ high_degree * urbanization_num , data = .)
+
+summary(inter_model_aic)
+```
