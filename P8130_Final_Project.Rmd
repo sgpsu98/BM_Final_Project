@@ -384,24 +384,14 @@ summary(interaction_)
 ## Correlation
 
 ```{r eval=FALSE, include=FALSE}
-modified_df = 
-  hc_df %>% 
-  mutate(
-    unemployment = as.factor(unemployment),
-    urbanization = as.factor(urbanization)
-  )
 
-modified_df %>% 
-   mutate(
-    unemployment = as.numeric(unemployment),
-    urbanization = as.numeric(urbanization)
-  ) %>% cor() %>% round(., 2)
+hc_df %>% cor() %>% round(., 2)
 ```
 
 ## regression of all numeric variables
 
 ```{r}
-reg_all = lm(rate ~ med_income + high_degree + non_citizen + gini_index + non_white, data = modified_df)
+reg_all = lm(rate ~ med_income + high_degree + non_citizen + gini_index + non_white, data = hc_df)
  summary(reg_all)
 ```
 
@@ -429,22 +419,22 @@ model =
 
 ```{r}
 # step1
-fit1 <- lm(rate ~ unemployment, data = modified_df)
+fit1 <- lm(rate ~ unemployment, data = hc_df)
 tidy(fit1)
-fit2 <- lm(rate ~ urbanization, data = modified_df)
+fit2 <- lm(rate ~ urbanization, data = hc_df)
 tidy(fit2)
-fit3 <- lm(rate ~ med_income, data = modified_df)
+fit3 <- lm(rate ~ med_income, data = hc_df)
 tidy(fit3)
-fit4 <- lm(rate ~ high_degree, data = modified_df)
+fit4 <- lm(rate ~ high_degree, data = hc_df)
 tidy(fit4)
-fit5 <- lm(rate ~ non_citizen, data = modified_df)
+fit5 <- lm(rate ~ non_citizen, data = hc_df)
 tidy(fit5)
-fit6 <- lm(rate ~ gini_index, data = modified_df)
+fit6 <- lm(rate ~ gini_index, data = hc_df)
 tidy(fit6)
-fit7 <- lm(rate ~ non_white, data = modified_df)
+fit7 <- lm(rate ~ non_white, data = hc_df)
 tidy(fit7)
 
-forward1 = lm(rate ~ gini_index, data = modified_df)
+forward1 = lm(rate ~ gini_index, data = hc_df)
 
 # step 2
 fit1 <- update(forward1, . ~ . +unemployment)
@@ -478,6 +468,52 @@ tidy(fit5)
 ```
 
 
+model based on income
+```{r}
+income_reg = lm(rate ~ med_income, data = hc_df)
+# step 1
+fit1 <- update(income_reg, . ~ . +unemployment_num)
+tidy(fit1)
+fit2 <- update(income_reg, . ~ . +urbanization_num)
+tidy(fit2)
+fit3 <- update(income_reg, . ~ . +gini_index)
+tidy(fit3)
+fit4 <- update(income_reg, . ~ . +high_degree)
+tidy(fit4)
+fit5 <- update(income_reg, . ~ . +non_citizen)
+tidy(fit5)
+fit6 <- update(income_reg, . ~ . +non_white)
+tidy(fit6) 
+
+forward1 = update(income_reg, . ~ . +gini_index)
+
+#step 2
+fit1 <- update(forward1, . ~ . +unemployment_num)
+tidy(fit1)
+fit2 <- update(forward1, . ~ . +urbanization_num)
+tidy(fit2)
+fit3 <- update(forward1, . ~ . +high_degree)
+tidy(fit3)
+fit4 <- update(forward1, . ~ . +non_citizen)
+tidy(fit4)
+fit5 <- update(forward1, . ~ . +non_white)
+tidy(fit5)
+
+forward2 = update(forward1, . ~ . +high_degree)
+
+#step 3
+fit1 <- update(forward2, . ~ . +unemployment_num)
+tidy(fit1)
+fit2 <- update(forward2, . ~ . +urbanization_num)
+tidy(fit2)
+fit3 <- update(forward2, . ~ . +non_white)
+tidy(fit3)
+fit4 <- update(forward2, . ~ . +non_citizen)
+tidy(fit4)
+
+```
+
+outcome: rate ~ med_income + high_degree + gini_index
 
 # InteractIon check
 
