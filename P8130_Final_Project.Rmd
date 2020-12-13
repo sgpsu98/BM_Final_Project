@@ -134,16 +134,17 @@ use 1 and 2 to denote the level low and high
 hc_df = 
   hc_df %>% 
   mutate(
-    unemployment_num = case_when(
+    unemployment = case_when(
       unemployment == "low" ~ 1,
       unemployment == "high" ~ 2)
   ) %>% 
   mutate(
-    urbanization_num = case_when(
+    urbanization = case_when(
       urbanization == "low" ~ 1,
       urbanization == "high" ~ 2)
   ) %>% 
-  select(-unemployment, -urbanization) %>% 
+  mutate(urbanization = as.factor(urbanization),
+         unemployment = as.factor(unemployment)) %>% 
   select(-state)
 ```
 
@@ -298,13 +299,13 @@ summary(gini_)
 
 ```{r}
 unemployment = 
- lm(rate ~ unemployment_num, data = hc_df)
+ lm(rate ~ unemployment, data = hc_df)
 
 summary(unemployment)
 ```
 ```{r}
 unemployment_ = 
- lm(lg ~ unemployment_num, data = hc_df_log)
+ lm(lg ~ unemployment, data = hc_df_log)
 
 summary(unemployment_)
 ```
@@ -314,7 +315,7 @@ summary(unemployment_)
 
 ```{r}
 urbanization = 
- lm(rate ~ urbanization_num, data = hc_df)
+ lm(rate ~ urbanization, data = hc_df)
 
 summary(urbanization)
 ```
@@ -322,7 +323,7 @@ summary(urbanization)
 
 ```{r}
 urbanization_ = 
- lm(lg ~ urbanization_num, data = hc_df_log)
+ lm(lg ~ urbanization, data = hc_df_log)
 
 summary(urbanization_)
 ```
@@ -400,13 +401,13 @@ reg_all = lm(rate ~ med_income + high_degree + non_citizen + gini_index + non_wh
 
 ```{r}
 
-hc_df$unemployment <-ifelse(hc_df$unemployment=="high",1,ifelse(hc_df$unemployment=="low", 0, NA))
+#hc_df$unemployment <-ifelse(hc_df$unemployment=="high",1,ifelse(hc_df$unemployment=="low", 0, NA))
 
-hc_df$urbanization <-ifelse(hc_df$urbanization=="high",1,ifelse(hc_df$urbanization=="low", 0, NA))
+#hc_df$urbanization <-ifelse(hc_df$urbanization=="high",1,ifelse(hc_df$urbanization=="low", 0, NA))
 
-hc_df = 
-  hc_df %>% 
-  select(-state)  
+ #hc_df = 
+ # hc_df %>% 
+ # select(-state)  
 
 model =  
   lm(rate ~ ., data = hc_df) 
@@ -472,9 +473,9 @@ model based on income
 ```{r}
 income_reg = lm(rate ~ med_income, data = hc_df)
 # step 1
-fit1 <- update(income_reg, . ~ . +unemployment_num)
+fit1 <- update(income_reg, . ~ . +unemployment)
 tidy(fit1)
-fit2 <- update(income_reg, . ~ . +urbanization_num)
+fit2 <- update(income_reg, . ~ . +urbanization)
 tidy(fit2)
 fit3 <- update(income_reg, . ~ . +gini_index)
 tidy(fit3)
@@ -488,9 +489,9 @@ tidy(fit6)
 forward1 = update(income_reg, . ~ . +gini_index)
 
 #step 2
-fit1 <- update(forward1, . ~ . +unemployment_num)
+fit1 <- update(forward1, . ~ . +unemployment)
 tidy(fit1)
-fit2 <- update(forward1, . ~ . +urbanization_num)
+fit2 <- update(forward1, . ~ . +urbanization)
 tidy(fit2)
 fit3 <- update(forward1, . ~ . +high_degree)
 tidy(fit3)
@@ -502,9 +503,9 @@ tidy(fit5)
 forward2 = update(forward1, . ~ . +high_degree)
 
 #step 3
-fit1 <- update(forward2, . ~ . +unemployment_num)
+fit1 <- update(forward2, . ~ . +unemployment)
 tidy(fit1)
-fit2 <- update(forward2, . ~ . +urbanization_num)
+fit2 <- update(forward2, . ~ . +urbanization)
 tidy(fit2)
 fit3 <- update(forward2, . ~ . +non_white)
 tidy(fit3)
@@ -515,6 +516,7 @@ tidy(fit4)
 
 outcome: rate ~ med_income + high_degree + gini_index
 
+
 # InteractIon check
 
 urbanization & high_degree
@@ -522,7 +524,7 @@ urbanization & high_degree
 ```{r}
 ##Urbanization -- high_degree
 hc_df %>% 
-  ggplot(aes(x = high_degree, y = rate, color = factor(urbanization_num))) +
+  ggplot(aes(x = high_degree, y = rate, color = factor(urbanization))) +
   geom_point() +
   stat_smooth(method = "lm", se = F)
 ```
@@ -533,7 +535,7 @@ urbanization & gini_index
 ```{r}
 ##Urbanization -- gini
 hc_df %>% 
-  ggplot(aes(x = gini_index, y = rate, color = factor(urbanization_num))) +
+  ggplot(aes(x = gini_index, y = rate, color = factor(urbanization))) +
   geom_point() +
   stat_smooth(method = "lm", se = F)
 
@@ -543,7 +545,7 @@ urbanization & income
 
 ```{r}
 hc_df %>% 
-  ggplot(aes(x = med_income, y = rate, color = factor(urbanization_num))) +
+  ggplot(aes(x = med_income, y = rate, color = factor(urbanization))) +
   geom_point() +
   stat_smooth(method = "lm", se = F)
 ```
@@ -554,7 +556,7 @@ unemployment & high_degree
 ```{r}
 ##Unemployment -- high_degree
 hc_df %>% 
-  ggplot(aes(x = high_degree, y = rate, color = factor(unemployment_num))) +
+  ggplot(aes(x = high_degree, y = rate, color = factor(unemployment))) +
   geom_point() +
   stat_smooth(method = "lm", se = F)
 
@@ -564,7 +566,7 @@ unemployment & gini
 ```{r}
 ##Unemployment -- gini
 hc_df %>% 
-  ggplot(aes(x = gini_index, y = rate, color = factor(unemployment_num))) +
+  ggplot(aes(x = gini_index, y = rate, color = factor(unemployment))) +
   geom_point() +
   stat_smooth(method = "lm", se = F)
 
@@ -574,25 +576,84 @@ unemployment & income
 
 ```{r}
 hc_df %>% 
-  ggplot(aes(x = med_income, y = rate, color = factor(unemployment_num))) +
+  ggplot(aes(x = med_income, y = rate, color = factor(unemployment))) +
   geom_point() +
   stat_smooth(method = "lm", se = F)
 ```
 
-# add interaction to aic model
+We check the interaction for `urbanization` and `unemployment` among `income`, `high_degree`, and `gini_index` and find that the three variables all have interactions with urbanizaiotn and unemployment. Next step, we will check whether the interaction term is significant.
+
+
+# add interaction to model and check significance
+
+initial:
+
+```{r}
+aic = 
+  hc_df %>% 
+  lm(rate ~ high_degree + gini_index, data = .)
+
+summary(aic)
+
+income_main = 
+  hc_df %>% 
+  lm(rate ~ med_income + gini_index, data = . )
+summary(income_main)
+
+```
+
+add interaction: 
+
+1. check for adding all interactions for the two models
 
 ```{r}
 inter_model_aic = 
   hc_df %>% 
-  lm(rate ~ high_degree + gini_index + high_degree * urbanization_num + high_degree * unemployment_num + gini_index * urbanization_num + gini_index * unemployment_num, data = .)
+  lm(rate ~ high_degree + gini_index + high_degree * urbanization + high_degree * unemployment + gini_index * urbanization + gini_index * unemployment, data = .)
 
 summary(inter_model_aic)
 ```
 
 ```{r}
-inter_model_aic = 
+inter_model_baseon_income = 
   hc_df %>% 
-  lm(rate ~ high_degree * urbanization_num , data = .)
+  lm(rate ~ med_income + gini_index + gini_index * urbanization + gini_index * unemployment + med_income * urbanization + med_income * unemployment, data = .)
 
-summary(inter_model_aic)
+summary(inter_model_baseon_income)
 ```
+
+2. check adding interaction for a main predictor
+
+```{r}
+inter_model_gini = 
+  hc_df %>% 
+  lm(rate ~ gini_index + gini_index * unemployment + gini_index * urbanization, data = .)
+
+summary(inter_model_gini)
+```
+
+
+```{r}
+inter_model_highdegree = 
+  hc_df %>% 
+  lm(rate ~ high_degree + high_degree * unemployment + high_degree * urbanization, data = .)
+
+summary(inter_model_highdegree)
+```
+
+
+```{r}
+inter_model_income = 
+  hc_df %>% 
+  lm(rate ~ med_income + med_income * unemployment + med_income * urbanization, data = .)
+
+summary(inter_model_income)
+```
+
+Conclude: we find that the interaction terms are not significant, and we will not add them into the models.
+
+Model 1: rate ~ high_degree + gini_index
+
+Model 2: rate ~ income + gini_index
+
+
