@@ -122,8 +122,7 @@ hc_df =
          non_white = perc_non_white)
 ```
 
-    ## 
-    ## -- Column specification --------------------------------------------------------
+    ## Parsed with column specification:
     ## cols(
     ##   state = col_character(),
     ##   unemployment = col_character(),
@@ -1383,66 +1382,7 @@ tidy(fit5)
     ## 3 gini_index   6.60      1.87            3.53 0.00104 
     ## 4 non_white   -0.349     0.261          -1.34 0.189
 
-``` r
-forward2 = update(forward1, . ~ . +high_degree)
-
-#step 3
-fit1 <- update(forward2, . ~ . +unemployment)
-tidy(fit1)
-```
-
-    ## # A tibble: 5 x 5
-    ##   term              estimate  std.error statistic   p.value
-    ##   <chr>                <dbl>      <dbl>     <dbl>     <dbl>
-    ## 1 (Intercept)   -7.95        1.75          -4.55  0.0000497
-    ## 2 med_income     0.000000601 0.00000460     0.131 0.897    
-    ## 3 gini_index     8.82        1.82           4.84  0.0000195
-    ## 4 high_degree    4.86        1.52           3.19  0.00273  
-    ## 5 unemployment2 -0.0125      0.0670        -0.187 0.853
-
-``` r
-fit2 <- update(forward2, . ~ . +urbanization)
-tidy(fit2)
-```
-
-    ## # A tibble: 5 x 5
-    ##   term              estimate  std.error statistic   p.value
-    ##   <chr>                <dbl>      <dbl>     <dbl>     <dbl>
-    ## 1 (Intercept)   -7.98        1.74         -4.57   0.0000456
-    ## 2 med_income     0.000000698 0.00000503    0.139  0.890    
-    ## 3 gini_index     8.77        1.86          4.70   0.0000306
-    ## 4 high_degree    4.91        1.53          3.21   0.00260  
-    ## 5 urbanization2 -0.00286     0.0710       -0.0403 0.968
-
-``` r
-fit3 <- update(forward2, . ~ . +non_white)
-tidy(fit3)
-```
-
-    ## # A tibble: 5 x 5
-    ##   term            estimate  std.error statistic   p.value
-    ##   <chr>              <dbl>      <dbl>     <dbl>     <dbl>
-    ## 1 (Intercept) -8.17        1.83         -4.48   0.0000620
-    ## 2 med_income  -0.000000264 0.00000524   -0.0503 0.960    
-    ## 3 gini_index   8.58        1.83          4.68   0.0000328
-    ## 4 high_degree  5.24        1.75          2.99   0.00471  
-    ## 5 non_white    0.0982      0.281         0.349  0.729
-
-``` r
-fit4 <- update(forward2, . ~ . +non_citizen)
-tidy(fit4)
-```
-
-    ## # A tibble: 5 x 5
-    ##   term           estimate  std.error statistic   p.value
-    ##   <chr>             <dbl>      <dbl>     <dbl>     <dbl>
-    ## 1 (Intercept) -8.19       1.76          -4.65  0.0000363
-    ## 2 med_income  -0.00000162 0.00000566    -0.287 0.775    
-    ## 3 gini_index   8.41       1.84           4.57  0.0000455
-    ## 4 high_degree  5.43       1.66           3.27  0.00222  
-    ## 5 non_citizen  0.890      1.32           0.674 0.504
-
-outcome: rate \~ med\_income + high\_degree + gini\_index
+outcome: rate \~ med\_income + gini\_index
 
 # InteractIon check
 
