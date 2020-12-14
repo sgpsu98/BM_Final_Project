@@ -660,9 +660,17 @@ cp_2 = ols_mallows_cp(model_2, model)
 ```
 
 ```{r}
-get_mse(model_1, var.estimate = FALSE)
-get_mse(model_2, var.estimate = FALSE)
+mse_1 = get_mse(model_1, var.estimate = FALSE)
+mse_2 = get_mse(model_2, var.estimate = FALSE)
 ```
 
 
+```{r}
+par(mfrow=c(2,2))
+plot(model_1)
+```
+```{r}
+par(mfrow=c(2,2))
+plot(model_2)
+```
 
