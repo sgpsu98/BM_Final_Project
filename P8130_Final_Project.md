@@ -44,6 +44,23 @@ library(mgcv)
 
 ``` r
 library(faraway)
+```
+
+    ## Registered S3 methods overwritten by 'lme4':
+    ##   method                          from
+    ##   cooks.distance.influence.merMod car 
+    ##   influence.merMod                car 
+    ##   dfbeta.influence.merMod         car 
+    ##   dfbetas.influence.merMod        car
+
+    ## 
+    ## Attaching package: 'faraway'
+
+    ## The following object is masked from 'package:olsrr':
+    ## 
+    ##     hsb
+
+``` r
 library(skimr)
 ```
 
@@ -142,13 +159,13 @@ head(hc_df)
     ## # A tibble: 6 x 9
     ##   state unemployment urbanization med_income high_degree non_citizen gini_index
     ##   <chr> <chr>        <chr>             <dbl>       <dbl>       <dbl>      <dbl>
-    ## 1 Alab~ high         low               42278       0.821        0.02      0.472
-    ## 2 Alas~ high         low               67629       0.914        0.04      0.422
-    ## 3 Ariz~ high         high              49254       0.842        0.1       0.455
-    ## 4 Arka~ high         low               44922       0.824        0.04      0.458
-    ## 5 Cali~ high         high              60487       0.806        0.13      0.471
-    ## 6 Colo~ low          high              60940       0.893        0.06      0.457
-    ## # ... with 2 more variables: non_white <dbl>, rate <dbl>
+    ## 1 Alab… high         low               42278       0.821        0.02      0.472
+    ## 2 Alas… high         low               67629       0.914        0.04      0.422
+    ## 3 Ariz… high         high              49254       0.842        0.1       0.455
+    ## 4 Arka… high         low               44922       0.824        0.04      0.458
+    ## 5 Cali… high         high              60487       0.806        0.13      0.471
+    ## 6 Colo… low          high              60940       0.893        0.06      0.457
+    ## # … with 2 more variables: non_white <dbl>, rate <dbl>
 
 Description by table?
 
@@ -1706,3 +1723,20 @@ will not add them into the models.
 Model 1: rate \~ high\_degree + gini\_index
 
 Model 2: rate \~ income + gini\_index
+
+``` r
+model_1 = lm(rate ~ high_degree + gini_index, data = hc_df)
+model_2 = lm(rate ~ med_income + gini_index, data = hc_df)
+```
+
+``` r
+ols_mallows_cp(model_1, model_2)
+```
+
+    ## [1] -6.005035
+
+``` r
+ols_mallows_cp(model_2, model_1)
+```
+
+    ## [1] 14.4627
