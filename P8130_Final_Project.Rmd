@@ -664,6 +664,15 @@ mse_1 = get_mse(model_1, var.estimate = FALSE)
 mse_2 = get_mse(model_2, var.estimate = FALSE)
 ```
 
+```{r}
+model_1_summ = summary(model_1)
+model_2_summ = summary(model_2)
+
+model_1_summ$adj.r.squared
+model_2_summ$adj.r.squared
+```
+
+
 
 ```{r}
 par(mfrow=c(2,2))
