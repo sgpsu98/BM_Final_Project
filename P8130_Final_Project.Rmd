@@ -10,6 +10,7 @@ library(tidyverse)
 library(viridis)
 library(purrr)
 library(olsrr)
+library(dvmisc)
 
 knitr::opts_chunk$set(
 	echo = TRUE,
@@ -657,4 +658,11 @@ model = lm(rate ~ ., data = hc_df)
 cp_1 = ols_mallows_cp(model_1, model)
 cp_2 = ols_mallows_cp(model_2, model)
 ```
+
+```{r}
+get_mse(model_1, var.estimate = FALSE)
+get_mse(model_2, var.estimate = FALSE)
+```
+
+
 
