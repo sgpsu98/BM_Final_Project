@@ -10,6 +10,7 @@ library(tidyverse)
 library(viridis)
 library(purrr)
 library(olsrr)
+library(dvmisc)
 
 knitr::opts_chunk$set(
 	echo = TRUE,
@@ -655,4 +656,11 @@ model_2 = lm(rate ~ med_income + gini_index, data = hc_df)
 ols_mallows_cp(model_1, model_2)
 ols_mallows_cp(model_2, model_1)
 ```
+
+```{r}
+get_mse(model_1, var.estimate = FALSE)
+get_mse(model_2, var.estimate = FALSE)
+```
+
+
 
