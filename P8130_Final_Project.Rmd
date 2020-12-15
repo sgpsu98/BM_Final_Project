@@ -381,6 +381,7 @@ fit5 <- update(forward1, . ~ . +non_white)
 tidy(fit5)
 
 
+
 ```
 
 Based on the results, the significant predictors are "gini_index" and "med_income".
@@ -392,8 +393,7 @@ Based on the results, the significant predictors are "gini_index" and "med_incom
 So based on the previous two methods with basis of "gini_index" and "med_income", the "gini_index" is significant in both cases. So the "gini_index" seems to be main predictor of the hate crimes.
 
 
-
-## MLR
+## Stepwise method
 
 ```{r}
 
@@ -401,20 +401,12 @@ mult.fit = lm(rate ~ ., data = hc_df)
 step(mult.fit, direction='backward')
 
 ```
-rate ~ high_degree + gini_index
+The stepwise method shows the relationship； rate ~ high_degree + gini_index.
+
+The results are similar to the previous model, showing the "high_degree" and "gini_index" are significant.
 
 
 
-
-
-
-
-
-
-
-
-
-outcome: rate ~ med_income + gini_index
 
 
 # InteractIon check
@@ -441,14 +433,6 @@ hc_df %>%
 
 ```
 
-urbanization & income
-
-```{r}
-hc_df %>% 
-  ggplot(aes(x = med_income, y = rate, color = factor(urbanization))) +
-  geom_point() +
-  stat_smooth(method = "lm", se = F)
-```
 
 
 unemployment & high_degree
@@ -472,16 +456,8 @@ hc_df %>%
 
 ```
 
-unemployment & income
 
-```{r}
-hc_df %>% 
-  ggplot(aes(x = med_income, y = rate, color = factor(unemployment))) +
-  geom_point() +
-  stat_smooth(method = "lm", se = F)
-```
-
-We check the interaction for `urbanization` and `unemployment` among `income`, `high_degree`, and `gini_index` and find that the three variables all have interactions with urbanizaiotn and unemployment. Next step, we will check whether the interaction term is significant.
+We check the interaction for `urbanization` and `unemployment` among `high_degree`, and `gini_index` and find that the two variables have interactions with urbanization and unemployment. Next step, we will check whether the interaction term is significant.
 
 
 # add interaction to model and check significance
@@ -489,16 +465,11 @@ We check the interaction for `urbanization` and `unemployment` among `income`, `
 initial:
 
 ```{r}
-aic = 
+model = 
   hc_df %>% 
   lm(rate ~ high_degree + gini_index, data = .)
 
-summary(aic)
-
-income_main = 
-  hc_df %>% 
-  lm(rate ~ med_income + gini_index, data = . )
-summary(income_main)
+summary(model)
 
 ```
 
@@ -507,46 +478,32 @@ add interaction:
 1. check for adding all interactions for the two models
 
 ```{r}
-inter_model_aic1= 
+inter_model_1= 
   hc_df %>% 
   lm(rate ~ high_degree * gini_index * urbanization , data = .)
 
-summary(inter_model_aic1)
+summary(inter_model_1)
 ```
 
 ```{r}
-inter_model_aic2 = 
+inter_model_2 = 
   hc_df %>% 
   lm(rate ~ high_degree * gini_index * unemployment, data = .)
 
-summary(inter_model_aic2)
+summary(inter_model_2)
 ```
 
-```{r}
-inter_model_income1 = 
-  hc_df %>% 
-  lm(rate ~ med_income * gini_index * urbanization, data = .)
 
-summary(inter_model_income1)
-```
+Conclude: we find that the interaction terms are not significant since the p values are larger than 0.05, so we will not add them into the models.
 
-```{r}
-inter_model_income2 = 
-  hc_df %>% 
-  lm(rate ~ med_income * gini_index * unemployment, data = .)
 
-summary(inter_model_income2)
-```
+So the final model is rate ~ high_degree + gini_index
 
-Conclude: we find that the interaction terms are not significant, and we will not add them into the models.
 
-Model 1: rate ~ high_degree + gini_index
-
-Model 2: rate ~ income + gini_index
 
 ```{r}
 model_1 = lm(rate ~ high_degree + gini_index, data = hc_df)
-model_2 = lm(rate ~ med_income + gini_index, data = hc_df)
+
 model = lm(rate ~ ., data = hc_df)
 ```
 
