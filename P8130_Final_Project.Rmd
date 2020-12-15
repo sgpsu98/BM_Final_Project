@@ -199,6 +199,12 @@ Since the p value is greater than 0.05, so we fail to reject the null and we cou
 
 
 
+## Correlation
+
+```{r }
+
+hc_df %>% cor() %>% round(., 2)
+```
 
 
 
@@ -278,97 +284,12 @@ summary(urbanization)
 We conduct the linear regression between Y and all variables X individuals, and the variable "med_income" and "gini_index" seem to be significant with p value smaller than 0.05. 
 
 
-
-
-## MLR
-
-```{r}
-
-mult.fit = lm(rate ~ ., data = hc_df)
-step(mult.fit, direction='backward')
-
-```
-rate ~ high_degree + gini_index
+Since "med_income" and "gini_index" are significant predictors, then we use these two predictors as the basis of the model to explore further associations.
 
 
 
-```{r}
+## use "gini_index" as the model basis
 
-mult.fit = lm(lg ~ ., data = hc_df_log)
-step(mult.fit, direction='backward')
-
-
-```
-lg ~ high_degree + gini_index
-
-
-```{r}
-# ????
-# three covariates
-# rate ~ income + gini +unemployment
-# log ~  income + degree
-# aic ~ degree +gini
-
-# focus on income + degree + gini and their interaction, maybe adjust for different levels of unemployment
-
-
-
-```
-
-
-
-
-## interaction
-??
-
-```{r}
-interaction = 
-  lm(rate ~ med_income + high_degree + gini_index + med_income * high_degree + med_income * gini_index + high_degree * gini_index + med_income * high_degree * gini_index, data = hc_df)
-summary(interaction)
-```
-
-
-```{r}
-interaction_ = 
-  lm(lg ~ med_income + high_degree + gini_index + med_income * high_degree + med_income * gini_index + high_degree * gini_index + med_income * high_degree * gini_index, data = hc_df_log)
-summary(interaction_)
-```
-
-## Correlation
-
-```{r }
-
-hc_df %>% cor() %>% round(., 2)
-```
-
-## regression of all numeric variables
-
-```{r}
-reg_all = lm(rate ~ med_income + high_degree + non_citizen + gini_index + non_white, data = hc_df)
- summary(reg_all)
-```
-
-
-## stepwise
-
-```{r}
-
-#hc_df$unemployment <-ifelse(hc_df$unemployment=="high",1,ifelse(hc_df$unemployment=="low", 0, NA))
-
-#hc_df$urbanization <-ifelse(hc_df$urbanization=="high",1,ifelse(hc_df$urbanization=="low", 0, NA))
-
- #hc_df = 
- # hc_df %>% 
- # select(-state)  
-
-model =  
-  lm(rate ~ ., data = hc_df) 
-
- step(model, direction = 'backward')
-
-```
-
-## Forward
 
 ```{r}
 # step1
@@ -420,8 +341,15 @@ tidy(fit5)
 
 ```
 
+Based on the results, the significant predictors are "gini_index" and "high_degree".
 
-model based on income
+
+
+
+
+## use "med_income" as the model basis
+
+
 ```{r}
 income_reg = lm(rate ~ med_income, data = hc_df)
 # step 1
@@ -454,6 +382,37 @@ tidy(fit5)
 
 
 ```
+
+Based on the results, the significant predictors are "gini_index" and "med_income".
+
+
+
+
+
+So based on the previous two methods with basis of "gini_index" and "med_income", the "gini_index" is significant in both cases. So the "gini_index" seems to be main predictor of the hate crimes.
+
+
+
+## MLR
+
+```{r}
+
+mult.fit = lm(rate ~ ., data = hc_df)
+step(mult.fit, direction='backward')
+
+```
+rate ~ high_degree + gini_index
+
+
+
+
+
+
+
+
+
+
+
 
 outcome: rate ~ med_income + gini_index
 
