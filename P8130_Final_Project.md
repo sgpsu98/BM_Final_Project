@@ -139,7 +139,8 @@ hc_df =
          non_white = perc_non_white)
 ```
 
-    ## Parsed with column specification:
+    ## 
+    ## -- Column specification --------------------------------------------------------
     ## cols(
     ##   state = col_character(),
     ##   unemployment = col_character(),
@@ -159,13 +160,13 @@ head(hc_df)
     ## # A tibble: 6 x 9
     ##   state unemployment urbanization med_income high_degree non_citizen gini_index
     ##   <chr> <chr>        <chr>             <dbl>       <dbl>       <dbl>      <dbl>
-    ## 1 Alab… high         low               42278       0.821        0.02      0.472
-    ## 2 Alas… high         low               67629       0.914        0.04      0.422
-    ## 3 Ariz… high         high              49254       0.842        0.1       0.455
-    ## 4 Arka… high         low               44922       0.824        0.04      0.458
-    ## 5 Cali… high         high              60487       0.806        0.13      0.471
-    ## 6 Colo… low          high              60940       0.893        0.06      0.457
-    ## # … with 2 more variables: non_white <dbl>, rate <dbl>
+    ## 1 Alab~ high         low               42278       0.821        0.02      0.472
+    ## 2 Alas~ high         low               67629       0.914        0.04      0.422
+    ## 3 Ariz~ high         high              49254       0.842        0.1       0.455
+    ## 4 Arka~ high         low               44922       0.824        0.04      0.458
+    ## 5 Cali~ high         high              60487       0.806        0.13      0.471
+    ## 6 Colo~ low          high              60940       0.893        0.06      0.457
+    ## # ... with 2 more variables: non_white <dbl>, rate <dbl>
 
 Description by table?
 
@@ -1556,166 +1557,130 @@ add interaction:
 <!-- end list -->
 
 ``` r
-inter_model_aic = 
+inter_model_aic1= 
   hc_df %>% 
-  lm(rate ~ high_degree + gini_index + high_degree * urbanization + high_degree * unemployment + gini_index * urbanization + gini_index * unemployment, data = .)
+  lm(rate ~ high_degree * gini_index * urbanization , data = .)
 
-summary(inter_model_aic)
+summary(inter_model_aic1)
 ```
 
     ## 
     ## Call:
-    ## lm(formula = rate ~ high_degree + gini_index + high_degree * 
-    ##     urbanization + high_degree * unemployment + gini_index * 
-    ##     urbanization + gini_index * unemployment, data = .)
+    ## lm(formula = rate ~ high_degree * gini_index * urbanization, 
+    ##     data = .)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -0.39175 -0.12426  0.00115  0.09600  0.45099 
+    ## -0.34687 -0.11903 -0.00746  0.10249  0.49588 
     ## 
     ## Coefficients:
-    ##                           Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)                 -2.344      5.094  -0.460    0.648
-    ## high_degree                  1.596      2.812   0.568    0.574
-    ## gini_index                   2.736      6.472   0.423    0.675
-    ## urbanization2               -4.271      5.384  -0.793    0.433
-    ## unemployment2               -3.286      3.423  -0.960    0.343
-    ## high_degree:urbanization2    3.103      3.092   1.003    0.322
-    ## high_degree:unemployment2    1.704      2.530   0.673    0.505
-    ## gini_index:urbanization2     3.541      6.735   0.526    0.602
-    ## gini_index:unemployment2     3.921      3.854   1.017    0.316
+    ##                                      Estimate Std. Error t value Pr(>|t|)
+    ## (Intercept)                           -16.560     46.948  -0.353    0.726
+    ## high_degree                            16.951     53.020   0.320    0.751
+    ## gini_index                             32.101    103.364   0.311    0.758
+    ## urbanization2                          -7.898     63.278  -0.125    0.901
+    ## high_degree:gini_index                -31.646    117.132  -0.270    0.789
+    ## high_degree:urbanization2               6.689     71.791   0.093    0.926
+    ## gini_index:urbanization2               10.026    137.937   0.073    0.942
+    ## high_degree:gini_index:urbanization2   -6.159    156.822  -0.039    0.969
     ## 
-    ## Residual standard error: 0.1989 on 36 degrees of freedom
-    ## Multiple R-squared:  0.4885, Adjusted R-squared:  0.3748 
-    ## F-statistic: 4.298 on 8 and 36 DF,  p-value: 0.001054
+    ## Residual standard error: 0.1989 on 37 degrees of freedom
+    ## Multiple R-squared:  0.4745, Adjusted R-squared:  0.3751 
+    ## F-statistic: 4.773 on 7 and 37 DF,  p-value: 0.0006716
 
 ``` r
-inter_model_baseon_income = 
+inter_model_aic2 = 
   hc_df %>% 
-  lm(rate ~ med_income + gini_index + gini_index * urbanization + gini_index * unemployment + med_income * urbanization + med_income * unemployment, data = .)
+  lm(rate ~ high_degree * gini_index * unemployment, data = .)
 
-summary(inter_model_baseon_income)
+summary(inter_model_aic2)
 ```
 
     ## 
     ## Call:
-    ## lm(formula = rate ~ med_income + gini_index + gini_index * urbanization + 
-    ##     gini_index * unemployment + med_income * urbanization + med_income * 
-    ##     unemployment, data = .)
+    ## lm(formula = rate ~ high_degree * gini_index * unemployment, 
+    ##     data = .)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -0.37547 -0.12184 -0.04494  0.07549  0.58341 
+    ## -0.37590 -0.12913 -0.01831  0.07931  0.46731 
     ## 
     ## Coefficients:
-    ##                            Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)               5.282e-01  2.803e+00   0.188    0.852
-    ## med_income                1.020e-06  8.886e-06   0.115    0.909
-    ## gini_index               -7.057e-01  5.588e+00  -0.126    0.900
-    ## urbanization2            -2.742e+00  3.176e+00  -0.863    0.394
-    ## unemployment2            -1.823e+00  1.875e+00  -0.972    0.338
-    ## gini_index:urbanization2  4.870e+00  6.159e+00   0.791    0.434
-    ## gini_index:unemployment2  3.560e+00  3.787e+00   0.940    0.353
-    ## med_income:urbanization2  9.917e-06  1.077e-05   0.921    0.363
-    ## med_income:unemployment2  2.957e-06  8.550e-06   0.346    0.731
+    ##                                      Estimate Std. Error t value Pr(>|t|)
+    ## (Intercept)                            -1.116     37.799  -0.030    0.977
+    ## high_degree                            -1.418     42.829  -0.033    0.974
+    ## gini_index                             -3.278     82.397  -0.040    0.968
+    ## unemployment2                          -7.950     55.327  -0.144    0.887
+    ## high_degree:gini_index                 10.511     93.545   0.112    0.911
+    ## high_degree:unemployment2               6.910     62.869   0.110    0.913
+    ## gini_index:unemployment2               13.100    120.584   0.109    0.914
+    ## high_degree:gini_index:unemployment2  -10.190    137.205  -0.074    0.941
     ## 
-    ## Residual standard error: 0.2216 on 36 degrees of freedom
-    ## Multiple R-squared:  0.3652, Adjusted R-squared:  0.2241 
-    ## F-statistic: 2.588 on 8 and 36 DF,  p-value: 0.02409
-
-2.  check adding interaction for a main predictor
-
-<!-- end list -->
+    ## Residual standard error: 0.1994 on 37 degrees of freedom
+    ## Multiple R-squared:  0.4719, Adjusted R-squared:  0.372 
+    ## F-statistic: 4.723 on 7 and 37 DF,  p-value: 0.0007269
 
 ``` r
-inter_model_gini = 
+inter_model_income1 = 
   hc_df %>% 
-  lm(rate ~ gini_index + gini_index * unemployment + gini_index * urbanization, data = .)
+  lm(rate ~ med_income * gini_index * urbanization, data = .)
 
-summary(inter_model_gini)
+summary(inter_model_income1)
 ```
 
     ## 
     ## Call:
-    ## lm(formula = rate ~ gini_index + gini_index * unemployment + 
-    ##     gini_index * urbanization, data = .)
+    ## lm(formula = rate ~ med_income * gini_index * urbanization, data = .)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -0.31214 -0.14325 -0.04018  0.08455  0.64211 
+    ## -0.42834 -0.11255 -0.01696  0.07826  0.50533 
     ## 
     ## Coefficients:
-    ##                          Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)                 1.093      1.718   0.636    0.528
-    ## gini_index                 -1.831      3.871  -0.473    0.639
-    ## unemployment2              -2.412      1.707  -1.412    0.166
-    ## urbanization2              -2.482      1.920  -1.293    0.204
-    ## gini_index:unemployment2    5.116      3.740   1.368    0.179
-    ## gini_index:urbanization2    5.605      4.244   1.321    0.194
+    ##                                       Estimate Std. Error t value Pr(>|t|)
+    ## (Intercept)                          7.561e+00  8.913e+00   0.848    0.402
+    ## med_income                          -1.414e-04  1.727e-04  -0.819    0.418
+    ## gini_index                          -1.686e+01  2.011e+01  -0.838    0.407
+    ## urbanization2                        1.383e+01  1.217e+01   1.137    0.263
+    ## med_income:gini_index                3.271e-04  3.946e-04   0.829    0.412
+    ## med_income:urbanization2            -2.357e-04  2.161e-04  -1.091    0.282
+    ## gini_index:urbanization2            -2.998e+01  2.682e+01  -1.118    0.271
+    ## med_income:gini_index:urbanization2  5.113e-04  4.825e-04   1.060    0.296
     ## 
-    ## Residual standard error: 0.2276 on 39 degrees of freedom
-    ## Multiple R-squared:  0.2743, Adjusted R-squared:  0.1813 
-    ## F-statistic: 2.949 on 5 and 39 DF,  p-value: 0.02369
+    ## Residual standard error: 0.1972 on 37 degrees of freedom
+    ## Multiple R-squared:  0.4832, Adjusted R-squared:  0.3854 
+    ## F-statistic: 4.941 on 7 and 37 DF,  p-value: 0.0005141
 
 ``` r
-inter_model_highdegree = 
+inter_model_income2 = 
   hc_df %>% 
-  lm(rate ~ high_degree + high_degree * unemployment + high_degree * urbanization, data = .)
+  lm(rate ~ med_income * gini_index * unemployment, data = .)
 
-summary(inter_model_highdegree)
+summary(inter_model_income2)
 ```
 
     ## 
     ## Call:
-    ## lm(formula = rate ~ high_degree + high_degree * unemployment + 
-    ##     high_degree * urbanization, data = .)
+    ## lm(formula = rate ~ med_income * gini_index * unemployment, data = .)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -0.34832 -0.11923 -0.04230  0.05871  1.11058 
+    ## -0.37760 -0.10759 -0.01941  0.07814  0.53562 
     ## 
     ## Coefficients:
-    ##                           Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)                -0.1788     1.7429  -0.103    0.919
-    ## high_degree                 0.4925     1.9730   0.250    0.804
-    ## unemployment2              -1.6308     2.2523  -0.724    0.473
-    ## urbanization2              -2.1066     2.0156  -1.045    0.302
-    ## high_degree:unemployment2   1.9147     2.6050   0.735    0.467
-    ## high_degree:urbanization2   2.5618     2.3307   1.099    0.278
+    ##                                       Estimate Std. Error t value Pr(>|t|)
+    ## (Intercept)                          1.008e+01  9.272e+00   1.087    0.284
+    ## med_income                          -1.933e-04  1.600e-04  -1.208    0.235
+    ## gini_index                          -2.270e+01  2.074e+01  -1.094    0.281
+    ## unemployment2                        1.319e+01  1.296e+01   1.017    0.316
+    ## med_income:gini_index                4.476e-04  3.588e-04   1.247    0.220
+    ## med_income:unemployment2            -2.138e-04  2.122e-04  -1.008    0.320
+    ## gini_index:unemployment2            -2.796e+01  2.844e+01  -0.983    0.332
+    ## med_income:gini_index:unemployment2  4.507e-04  4.667e-04   0.966    0.340
     ## 
-    ## Residual standard error: 0.2416 on 39 degrees of freedom
-    ## Multiple R-squared:  0.1823, Adjusted R-squared:  0.07747 
-    ## F-statistic: 1.739 on 5 and 39 DF,  p-value: 0.1486
-
-``` r
-inter_model_income = 
-  hc_df %>% 
-  lm(rate ~ med_income + med_income * unemployment + med_income * urbanization, data = .)
-
-summary(inter_model_income)
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = rate ~ med_income + med_income * unemployment + 
-    ##     med_income * urbanization, data = .)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -0.43900 -0.12937 -0.02858  0.07323  0.94928 
-    ## 
-    ## Coefficients:
-    ##                            Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)               3.402e-01  4.120e-01   0.826    0.414
-    ## med_income               -1.471e-06  7.357e-06  -0.200    0.843
-    ## unemployment2            -4.603e-01  4.750e-01  -0.969    0.339
-    ## urbanization2            -5.606e-01  4.685e-01  -1.197    0.239
-    ## med_income:unemployment2  8.562e-06  8.425e-06   1.016    0.316
-    ## med_income:urbanization2  1.127e-05  8.382e-06   1.345    0.186
-    ## 
-    ## Residual standard error: 0.2386 on 39 degrees of freedom
-    ## Multiple R-squared:  0.2025, Adjusted R-squared:  0.1003 
-    ## F-statistic: 1.981 on 5 and 39 DF,  p-value: 0.1031
+    ## Residual standard error: 0.1953 on 37 degrees of freedom
+    ## Multiple R-squared:  0.4933, Adjusted R-squared:  0.3975 
+    ## F-statistic: 5.146 on 7 and 37 DF,  p-value: 0.0003732
 
 Conclude: we find that the interaction terms are not significant, and we
 will not add them into the models.
@@ -1727,16 +1692,44 @@ Model 2: rate \~ income + gini\_index
 ``` r
 model_1 = lm(rate ~ high_degree + gini_index, data = hc_df)
 model_2 = lm(rate ~ med_income + gini_index, data = hc_df)
+model = lm(rate ~ ., data = hc_df)
 ```
 
 ``` r
-ols_mallows_cp(model_1, model_2)
+cp_1 = ols_mallows_cp(model_1, model)
+cp_2 = ols_mallows_cp(model_2, model)
 ```
-
-    ## [1] -6.005035
 
 ``` r
-ols_mallows_cp(model_2, model_1)
+mse_1 = get_mse(model_1, var.estimate = FALSE)
+mse_2 = get_mse(model_2, var.estimate = FALSE)
 ```
 
-    ## [1] 14.4627
+``` r
+model_1_summ = summary(model_1)
+model_2_summ = summary(model_2)
+
+model_1_summ$adj.r.squared
+```
+
+    ## [1] 0.4254814
+
+``` r
+model_2_summ$adj.r.squared
+```
+
+    ## [1] 0.2686829
+
+``` r
+par(mfrow=c(2,2))
+plot(model_1)
+```
+
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-44-1.png" width="90%" />
+
+``` r
+par(mfrow=c(2,2))
+plot(model_2)
+```
+
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-45-1.png" width="90%" />

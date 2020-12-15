@@ -598,47 +598,35 @@ add interaction:
 1. check for adding all interactions for the two models
 
 ```{r}
-inter_model_aic = 
+inter_model_aic1= 
   hc_df %>% 
-  lm(rate ~ high_degree + gini_index + high_degree * urbanization + high_degree * unemployment + gini_index * urbanization + gini_index * unemployment, data = .)
+  lm(rate ~ high_degree * gini_index * urbanization , data = .)
 
-summary(inter_model_aic)
+summary(inter_model_aic1)
 ```
 
 ```{r}
-inter_model_baseon_income = 
+inter_model_aic2 = 
   hc_df %>% 
-  lm(rate ~ med_income + gini_index + gini_index * urbanization + gini_index * unemployment + med_income * urbanization + med_income * unemployment, data = .)
+  lm(rate ~ high_degree * gini_index * unemployment, data = .)
 
-summary(inter_model_baseon_income)
+summary(inter_model_aic2)
 ```
 
-2. check adding interaction for a main predictor
-
 ```{r}
-inter_model_gini = 
+inter_model_income1 = 
   hc_df %>% 
-  lm(rate ~ gini_index + gini_index * unemployment + gini_index * urbanization, data = .)
+  lm(rate ~ med_income * gini_index * urbanization, data = .)
 
-summary(inter_model_gini)
+summary(inter_model_income1)
 ```
 
-
 ```{r}
-inter_model_highdegree = 
+inter_model_income2 = 
   hc_df %>% 
-  lm(rate ~ high_degree + high_degree * unemployment + high_degree * urbanization, data = .)
+  lm(rate ~ med_income * gini_index * unemployment, data = .)
 
-summary(inter_model_highdegree)
-```
-
-
-```{r}
-inter_model_income = 
-  hc_df %>% 
-  lm(rate ~ med_income + med_income * unemployment + med_income * urbanization, data = .)
-
-summary(inter_model_income)
+summary(inter_model_income2)
 ```
 
 Conclude: we find that the interaction terms are not significant, and we will not add them into the models.
