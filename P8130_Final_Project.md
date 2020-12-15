@@ -139,8 +139,7 @@ hc_df =
          non_white = perc_non_white)
 ```
 
-    ## 
-    ## -- Column specification --------------------------------------------------------
+    ## Parsed with column specification:
     ## cols(
     ##   state = col_character(),
     ##   unemployment = col_character(),
@@ -160,13 +159,13 @@ head(hc_df)
     ## # A tibble: 6 x 9
     ##   state unemployment urbanization med_income high_degree non_citizen gini_index
     ##   <chr> <chr>        <chr>             <dbl>       <dbl>       <dbl>      <dbl>
-    ## 1 Alab~ high         low               42278       0.821        0.02      0.472
-    ## 2 Alas~ high         low               67629       0.914        0.04      0.422
-    ## 3 Ariz~ high         high              49254       0.842        0.1       0.455
-    ## 4 Arka~ high         low               44922       0.824        0.04      0.458
-    ## 5 Cali~ high         high              60487       0.806        0.13      0.471
-    ## 6 Colo~ low          high              60940       0.893        0.06      0.457
-    ## # ... with 2 more variables: non_white <dbl>, rate <dbl>
+    ## 1 Alab… high         low               42278       0.821        0.02      0.472
+    ## 2 Alas… high         low               67629       0.914        0.04      0.422
+    ## 3 Ariz… high         high              49254       0.842        0.1       0.455
+    ## 4 Arka… high         low               44922       0.824        0.04      0.458
+    ## 5 Cali… high         high              60487       0.806        0.13      0.471
+    ## 6 Colo… low          high              60940       0.893        0.06      0.457
+    ## # … with 2 more variables: non_white <dbl>, rate <dbl>
 
 Description by table?
 
@@ -1712,7 +1711,7 @@ Model 2: rate \~ income + gini\_index
 
 ``` r
 model_1 = lm(rate ~ high_degree + gini_index, data = hc_df)
-model_2 = lm(rate ~ med_income + gini_index + med_income * gini_index, data = hc_df)
+model_2 = lm(rate ~ med_income + gini_index, data = hc_df)
 model = lm(rate ~ ., data = hc_df)
 ```
 
@@ -1729,7 +1728,7 @@ cp_1
 cp_2
 ```
 
-    ## [1] 0.02824688
+    ## [1] 8.921808
 
 ``` r
 mse_1 = get_mse(model_1, var.estimate = FALSE)
@@ -1744,7 +1743,7 @@ mse_1
 mse_2
 ```
 
-    ## [1] 0.03663229
+    ## [1] 0.04628057
 
 ``` r
 model_1_summ = summary(model_1)
@@ -1759,7 +1758,7 @@ model_1_summ$adj.r.squared
 model_2_summ$adj.r.squared
 ```
 
-    ## [1] 0.4211432
+    ## [1] 0.2686829
 
 ``` r
 par(mfrow=c(2,2))
