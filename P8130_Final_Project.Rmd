@@ -514,34 +514,27 @@ So the final model is rate ~ high_degree + gini_index
 
 
 ```{r}
-model_1 = lm(rate ~ high_degree + gini_index, data = hc_df)
+model = lm(rate ~ high_degree + gini_index, data = hc_df)
 
-model = lm(rate ~ ., data = hc_df)
+model_full = lm(rate ~ ., data = hc_df)
 ```
 
 
 ```{r}
-cp_1 = ols_mallows_cp(model_1, model)
-cp_2 = ols_mallows_cp(model_2, model)
-
+cp_1 = ols_mallows_cp(model, model_full)
 cp_1
-cp_2
 ```
 
 ```{r}
-mse_1 = get_mse(model_1, var.estimate = FALSE)
-mse_2 = get_mse(model_2, var.estimate = FALSE)
-
+mse_1 = get_mse(model, var.estimate = FALSE)
 mse_1
-mse_2
+
 ```
 
 ```{r}
-model_1_summ = summary(model_1)
-model_2_summ = summary(model_2)
+model_summ = summary(model)
+model_summ$adj.r.squared
 
-model_1_summ$adj.r.squared
-model_2_summ$adj.r.squared
 ```
 
 
