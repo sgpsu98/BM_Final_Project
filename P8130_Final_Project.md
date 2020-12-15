@@ -899,12 +899,64 @@ tidy(fit5)
     ## 3 gini_index   6.60      1.87            3.53 0.00104 
     ## 4 non_white   -0.349     0.261          -1.34 0.189
 
-Based on the results, the significant predictors are “gini\_index” and
-“med\_income”.
+``` r
+#delete med_income, add high_degree
+forward2 = lm(rate~gini_index + high_degree, data = hc_df)
 
-So based on the previous two methods with basis of “gini\_index” and
-“med\_income”, the “gini\_index” is significant in both cases. So the
-“gini\_index” seems to be main predictor of the hate crimes.
+#step 3
+fit1 <- update(forward2, . ~ . +unemployment)
+tidy(fit1)
+```
+
+    ## # A tibble: 4 x 5
+    ##   term         estimate std.error statistic    p.value
+    ##   <chr>           <dbl>     <dbl>     <dbl>      <dbl>
+    ## 1 (Intercept)   -8.06      1.48      -5.45  0.00000264
+    ## 2 gini_index     8.90      1.69       5.26  0.00000483
+    ## 3 high_degree    4.99      1.11       4.51  0.0000536 
+    ## 4 unemployment  -0.0126    0.0661    -0.191 0.849
+
+``` r
+fit2 <- update(forward2, . ~ . +urbanization)
+tidy(fit2)
+```
+
+    ## # A tibble: 4 x 5
+    ##   term         estimate std.error statistic    p.value
+    ##   <chr>           <dbl>     <dbl>     <dbl>      <dbl>
+    ## 1 (Intercept)  -8.10       1.50     -5.40   0.00000312
+    ## 2 gini_index    8.81       1.81      4.86   0.0000175 
+    ## 3 high_degree   5.06       1.06      4.77   0.0000237 
+    ## 4 urbanization  0.00111    0.0642    0.0174 0.986
+
+``` r
+fit3 <- update(forward2, . ~ . +non_white)
+tidy(fit3)
+```
+
+    ## # A tibble: 4 x 5
+    ##   term        estimate std.error statistic    p.value
+    ##   <chr>          <dbl>     <dbl>     <dbl>      <dbl>
+    ## 1 (Intercept)  -8.12       1.46     -5.55  0.00000188
+    ## 2 gini_index    8.57       1.79      4.80  0.0000213 
+    ## 3 high_degree   5.18       1.10      4.71  0.0000288 
+    ## 4 non_white     0.0914     0.244     0.375 0.710
+
+``` r
+fit4 <- update(forward2, . ~ . +non_citizen)
+tidy(fit4)
+```
+
+    ## # A tibble: 4 x 5
+    ##   term        estimate std.error statistic    p.value
+    ##   <chr>          <dbl>     <dbl>     <dbl>      <dbl>
+    ## 1 (Intercept)   -7.93       1.48    -5.34  0.00000370
+    ## 2 gini_index     8.35       1.81     4.62  0.0000375 
+    ## 3 high_degree    5.06       1.05     4.82  0.0000202 
+    ## 4 non_citizen    0.667      1.06     0.631 0.531
+
+Based on the results, the significant predictors are “gini\_index” and
+“high\_degree”.
 
 ## Stepwise method
 
@@ -993,7 +1045,7 @@ gini\_index.
 The results are similar to the previous model, showing the
 “high\_degree” and “gini\_index” are significant.
 
-# InteractIon check
+# Interaction check
 
 urbanization & high\_degree
 
@@ -1164,23 +1216,39 @@ models.
 
 So the final model is rate \~ high\_degree + gini\_index
 
-``` r
-model_1 = lm(rate ~ high_degree + gini_index, data = hc_df)
+# check the validity
 
-model = lm(rate ~ ., data = hc_df)
+``` r
+model = lm(rate ~ high_degree + gini_index, data = hc_df)
+
+model_full = lm(rate ~ ., data = hc_df)
 ```
 
 ``` r
-cp_1 = ols_mallows_cp(model_1, model)
+cp_1 = ols_mallows_cp(model, model)
 
+cp_1
+```
+
+    ## [1] 3
+
+``` r
+mse_1 = get_mse(model, var.estimate = FALSE)
+
+mse_1
+```
+
+    ## [1] 0.03635776
+
+``` r
+cp_1 = ols_mallows_cp(model, model_full)
 cp_1
 ```
 
     ## [1] -1.352896
 
 ``` r
-mse_1 = get_mse(model_1, var.estimate = FALSE)
-
+mse_1 = get_mse(model, var.estimate = FALSE)
 mse_1
 ```
 
@@ -1211,25 +1279,26 @@ cv_df %>%
   ggplot(aes(x = model, y = rmse)) + geom_violin()
 ```
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-26-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-27-1.png" width="90%" />
 
 ``` r
 mean(cv_df$rmse_linear)
 ```
 
-    ## [1] 0.2178795
+    ## [1] 0.2210806
 
 ``` r
-model_1_summ = summary(model_1)
-
-model_1_summ$adj.r.squared
+model_summ = summary(model)
+model_summ$adj.r.squared
 ```
 
     ## [1] 0.4254814
 
+## plot
+
 ``` r
 par(mfrow=c(2,2))
-plot(model_1)
+plot(model)
 ```
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-28-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-29-1.png" width="90%" />
