@@ -396,13 +396,9 @@ tidy(fit4)
 
 ```
 
-Based on the results, the significant predictors are "gini_index" and "med_income".
+Based on the results, the significant predictors are "gini_index" and "high_degree".
 
 
-
-
-
-So based on the previous two methods with basis of "gini_index" and "med_income", the "gini_index" is significant in both cases. So the "gini_index" seems to be main predictor of the hate crimes.
 
 
 ## Stepwise method
@@ -421,7 +417,8 @@ The results are similar to the previous model, showing the "high_degree" and "gi
 
 
 
-# InteractIon check
+
+# Interaction check
 
 urbanization & high_degree
 
@@ -512,6 +509,8 @@ Conclude: we find that the interaction terms are not significant since the p val
 So the final model is rate ~ high_degree + gini_index
 
 
+# check the validity
+
 
 ```{r}
 model = lm(rate ~ high_degree + gini_index, data = hc_df)
@@ -537,14 +536,11 @@ model_summ$adj.r.squared
 
 ```
 
-
+## plot
 
 ```{r}
 par(mfrow=c(2,2))
-plot(model_1)
+plot(model)
 ```
-```{r}
-par(mfrow=c(2,2))
-plot(model_2)
-```
+
 
