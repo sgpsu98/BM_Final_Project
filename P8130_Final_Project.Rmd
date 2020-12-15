@@ -510,26 +510,51 @@ model = lm(rate ~ ., data = hc_df)
 
 ```{r}
 cp_1 = ols_mallows_cp(model_1, model)
-cp_2 = ols_mallows_cp(model_2, model)
 
 cp_1
-cp_2
+
 ```
 
 ```{r}
 mse_1 = get_mse(model_1, var.estimate = FALSE)
-mse_2 = get_mse(model_2, var.estimate = FALSE)
 
 mse_1
-mse_2
 ```
+
+
+```{r}
+cv_df =
+  crossv_mc(hc_df, 100) %>% 
+  mutate(
+    train = map(train, as_tibble),
+    test = map(test, as_tibble))
+
+cv_df = 
+  cv_df %>% 
+  mutate(
+    linear_mod  = map(train, ~lm(rate ~ gini_index + high_degree, data = .x))) %>% 
+  mutate(
+    rmse_linear = map2_dbl(linear_mod, test, ~rmse(model = .x, data = .y)))
+
+
+cv_df %>% 
+  select(starts_with("rmse")) %>% 
+  pivot_longer(
+    everything(),
+    names_to = "model", 
+    values_to = "rmse",
+    names_prefix = "rmse_") %>% 
+  ggplot(aes(x = model, y = rmse)) + geom_violin()
+
+mean(cv_df$rmse_linear)
+```
+
+
 
 ```{r}
 model_1_summ = summary(model_1)
-model_2_summ = summary(model_2)
 
 model_1_summ$adj.r.squared
-model_2_summ$adj.r.squared
 ```
 
 
@@ -537,9 +562,5 @@ model_2_summ$adj.r.squared
 ```{r}
 par(mfrow=c(2,2))
 plot(model_1)
-```
-```{r}
-par(mfrow=c(2,2))
-plot(model_2)
 ```
 

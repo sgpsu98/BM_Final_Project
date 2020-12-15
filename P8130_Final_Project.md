@@ -71,17 +71,19 @@ library(skimr)
 Hate crime is a significant issue under the present circumstances. There
 exist multiple variables related to hate crime. In this project, we
 intend to find the relationships between the hate crime rate and the
-eight variables. Among the eight variables, income status is about
-unemployment level, medians of household income, and Gini index in the
-dataset. Especially, the Gini index is a measure of the distribution of
-income across a population developed by the Italian statistician Corrado
-Gini in 1912. \[1\] In real life, the high-valued Gini index implies the
-high levels of inequality in the whole society. Also, the high
-unemployment rate will lower the medians of household income. People
-without employment are more likely to participate in hate crime. \[2\]
-Besides, the education level matters in income status. A higher level of
-education status, like the high-school degree in this study, will lead
-to an occupation with a higher salary, which can increase the medians of
+eight variables.
+
+Among the eight variables, income status is about unemployment level,
+medians of household income, and Gini index in the dataset. Especially,
+the Gini index is a measure of the distribution of income across a
+population developed by the Italian statistician Corrado Gini in 1912.
+\[1\] In real life, the high-valued Gini index implies the high levels
+of inequality in the whole society. Also, the high unemployment rate
+will lower the medians of household income. People without employment
+are more likely to participate in hate crime. \[2\] Besides, the
+education level matters in income status. A higher level of education
+status, like the high-school degree in this study, will lead to an
+occupation with a higher salary, which can increase the medians of
 household income and decrease unemployment.
 
 Hate crime, according to website information
@@ -139,7 +141,8 @@ hc_df =
          non_white = perc_non_white)
 ```
 
-    ## Parsed with column specification:
+    ## 
+    ## -- Column specification --------------------------------------------------------
     ## cols(
     ##   state = col_character(),
     ##   unemployment = col_character(),
@@ -159,37 +162,54 @@ head(hc_df)
     ## # A tibble: 6 x 9
     ##   state unemployment urbanization med_income high_degree non_citizen gini_index
     ##   <chr> <chr>        <chr>             <dbl>       <dbl>       <dbl>      <dbl>
-    ## 1 Alab… high         low               42278       0.821        0.02      0.472
-    ## 2 Alas… high         low               67629       0.914        0.04      0.422
-    ## 3 Ariz… high         high              49254       0.842        0.1       0.455
-    ## 4 Arka… high         low               44922       0.824        0.04      0.458
-    ## 5 Cali… high         high              60487       0.806        0.13      0.471
-    ## 6 Colo… low          high              60940       0.893        0.06      0.457
-    ## # … with 2 more variables: non_white <dbl>, rate <dbl>
+    ## 1 Alab~ high         low               42278       0.821        0.02      0.472
+    ## 2 Alas~ high         low               67629       0.914        0.04      0.422
+    ## 3 Ariz~ high         high              49254       0.842        0.1       0.455
+    ## 4 Arka~ high         low               44922       0.824        0.04      0.458
+    ## 5 Cali~ high         high              60487       0.806        0.13      0.471
+    ## 6 Colo~ low          high              60940       0.893        0.06      0.457
+    ## # ... with 2 more variables: non_white <dbl>, rate <dbl>
 
 Description by table?
 
 ``` r
-my_controls <- tableby.control(
-               total = T, # do you wanna show he overall col?
-               test=F,  # No test p-values yet
-               numeric.stats = c("meansd", "medianq1q3", "range", "Nmiss2"), # for the continuous var. (a.k.a numeric var.) 
-               cat.stats = c("countpct", "Nmiss2"), # for categorical var., we select the count, percentage, and missing values.
-               stats.labels = list(
-               meansd = "Mean (SD)",
-               medianq1q3 = "Median (Q1, Q3)",
-               range = "Min - Max",
-               Nmiss2 = "Missing",
-               countpct = "N (%)"))
-
-
-## or use skim()
-
-
-#summary(tab1, title = "Descriptive statistics ", text = T,  digits = 1) %>%  knitr::kable()   
+skim(hc_df)
 ```
 
-### change “unemployment” and “urbanization” from characters to corresponding numbers
+|                                                  |        |
+| :----------------------------------------------- | :----- |
+| Name                                             | hc\_df |
+| Number of rows                                   | 45     |
+| Number of columns                                | 9      |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_   |        |
+| Column type frequency:                           |        |
+| character                                        | 3      |
+| numeric                                          | 6      |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |        |
+| Group variables                                  | None   |
+
+Data summary
+
+**Variable type: character**
+
+| skim\_variable | n\_missing | complete\_rate | min | max | empty | n\_unique | whitespace |
+| :------------- | ---------: | -------------: | --: | --: | ----: | --------: | ---------: |
+| state          |          0 |              1 |   4 |  20 |     0 |        45 |          0 |
+| unemployment   |          0 |              1 |   3 |   4 |     0 |         2 |          0 |
+| urbanization   |          0 |              1 |   3 |   4 |     0 |         2 |          0 |
+
+**Variable type: numeric**
+
+| skim\_variable | n\_missing | complete\_rate |     mean |      sd |       p0 |      p25 |      p50 |      p75 |     p100 | hist  |
+| :------------- | ---------: | -------------: | -------: | ------: | -------: | -------: | -------: | -------: | -------: | :---- |
+| med\_income    |          0 |              1 | 55299.49 | 8979.49 | 39552.00 | 48060.00 | 54916.00 | 60708.00 | 76165.00 | ▆▆▇▃▂ |
+| high\_degree   |          0 |              1 |     0.87 |    0.03 |     0.80 |     0.84 |     0.87 |     0.89 |     0.92 | ▃▆▅▇▇ |
+| non\_citizen   |          0 |              1 |     0.06 |    0.03 |     0.01 |     0.03 |     0.05 |     0.08 |     0.13 | ▇▇▆▃▂ |
+| gini\_index    |          0 |              1 |     0.46 |    0.02 |     0.42 |     0.44 |     0.46 |     0.47 |     0.53 | ▅▇▅▁▁ |
+| non\_white     |          0 |              1 |     0.32 |    0.15 |     0.06 |     0.21 |     0.30 |     0.42 |     0.63 | ▃▇▅▅▂ |
+| rate           |          0 |              1 |     0.30 |    0.25 |     0.07 |     0.14 |     0.23 |     0.35 |     1.52 | ▇▂▁▁▁ |
+
+### change “unemployment” and “urbanization” from characters to corresponding numbers “1”,“2”
 
 use 1 and 2 to denote the level low and high
 
@@ -206,8 +226,7 @@ hc_df =
       urbanization == "low" ~ 1,
       urbanization == "high" ~ 2)
   ) %>% 
-  #mutate(urbanization = as.factor(urbanization),
-  #       unemployment = as.factor(unemployment)) %>% 
+  
   select(-state)
 ```
 
@@ -219,7 +238,7 @@ hc_df %>%
   geom_histogram(fill = "blue", alpha = .4) +
   geom_density(aes( x = rate, y = ..density..)) +
   theme_bw() +
-  labs(title = "Distribution for hate crimes per 100k",
+  labs(title = "Figure1. Distribution for hate crimes per 100k",
        x = "hate crimes per 100k splc",
        y = " Count") +
   theme(plot.title = element_text(hjust = .5 ))
@@ -237,42 +256,34 @@ hc_df_log =
 
 hc_df_log%>% 
   ggplot(aes(x = lg, y = ..density..)) +
-  geom_histogram(fill = "blue", alpha = .4) +
+  geom_histogram(fill = "blue", alpha = .4, binwidth = 0.2) +
   geom_density(aes( lg, y = ..density..)) +
   theme_bw() +
-  labs(title = "Distribution for Log ",
+  labs(title = "Figure2. Distribution for Log ",
        x = "Log (hate crimes per 100k splc)",
        y = " Count") +
   theme(plot.title = element_text(hjust = .5 ))
 ```
 
-    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
-
 <img src="P8130_Final_Project_files/figure-gfm/plot distribution of rate 2-1.png" width="90%" />
 
 ``` r
-# Histogram - notice the severe right skew
-hist(hc_df_log$lg, xlab="log(hate crimes per 100k splc)", freq=T, col=2)
-```
-
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-3-1.png" width="90%" />
-
-``` r
 # Create a quantile-quantile plot (QQplot)
-qqnorm(hc_df_log$lg, col=2, pch=19, cex=1.5)
+qqnorm(hc_df_log$lg, col=2, pch=19, cex=1.5, main = "Figure3. Normal Q-Q Plot")
 
 # Add a straight line which passes through the first and third quartiles.
 qqline(hc_df_log$lg, col = 1,lwd=2,lty=2)
 ```
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-3-2.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-3-1.png" width="90%" />
+
 Based on the QQ plot in terms of the log(hate crimes per 100k splc), the
 points are nearly distributed along the straight line, so there is not
 severe departure from the normality.
 
 ``` r
 # Perform Shapiro-Wilk test
-shapiro.test(hc_df_log$lg)
+shapiro.test(hc_df_log$lg) 
 ```
 
     ## 
@@ -289,6 +300,31 @@ The W test statistic is 0.983 with p value of 0.7453.
 Since the p value is greater than 0.05, so we fail to reject the null
 and we could conclude that the log(hate crimes per 100k splc) seems to
 be normally distributed under the significance level of 5%.
+
+## Correlation
+
+``` r
+hc_df %>% cor() %>% round(., 2)
+```
+
+    ##              unemployment urbanization med_income high_degree non_citizen
+    ## unemployment         1.00         0.24      -0.25       -0.45        0.24
+    ## urbanization         0.24         1.00       0.26       -0.16        0.68
+    ## med_income          -0.25         0.26       1.00        0.65        0.30
+    ## high_degree         -0.45        -0.16       0.65        1.00       -0.26
+    ## non_citizen          0.24         0.68       0.30       -0.26        1.00
+    ## gini_index           0.41         0.43      -0.13       -0.54        0.48
+    ## non_white            0.43         0.51       0.04       -0.50        0.75
+    ## rate                -0.02         0.21       0.34        0.26        0.24
+    ##              gini_index non_white  rate
+    ## unemployment       0.41      0.43 -0.02
+    ## urbanization       0.43      0.51  0.21
+    ## med_income        -0.13      0.04  0.34
+    ## high_degree       -0.54     -0.50  0.26
+    ## non_citizen        0.48      0.75  0.24
+    ## gini_index         1.00      0.55  0.38
+    ## non_white          0.55      1.00  0.11
+    ## rate               0.38      0.11  1.00
 
 ## Verify association
 
@@ -319,31 +355,6 @@ summary(income)
     ## Multiple R-squared:  0.1182, Adjusted R-squared:  0.09768 
     ## F-statistic: 5.763 on 1 and 43 DF,  p-value: 0.02076
 
-``` r
-income_ = 
-  lm(lg ~ med_income, data = hc_df_log)
-summary(income_)
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = lg ~ med_income, data = hc_df_log)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -1.34892 -0.41049 -0.00482  0.39402  1.55022 
-    ## 
-    ## Coefficients:
-    ##               Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept) -2.665e+00  5.870e-01  -4.540 4.49e-05 ***
-    ## med_income   2.248e-05  1.048e-05   2.145   0.0376 *  
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.6242 on 43 degrees of freedom
-    ## Multiple R-squared:  0.09668,    Adjusted R-squared:  0.07567 
-    ## F-statistic: 4.602 on 1 and 43 DF,  p-value: 0.03762
-
 **high school degree**
 
 ``` r
@@ -371,32 +382,6 @@ summary(degree)
     ## Residual standard error: 0.2455 on 43 degrees of freedom
     ## Multiple R-squared:  0.06907,    Adjusted R-squared:  0.04742 
     ## F-statistic: 3.191 on 1 and 43 DF,  p-value: 0.08112
-
-``` r
-degree_ = 
- lm(lg ~ high_degree, data = hc_df_log)
-
-summary(degree_)
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = lg ~ high_degree, data = hc_df_log)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -1.16891 -0.52541  0.04074  0.41514  1.81610 
-    ## 
-    ## Coefficients:
-    ##             Estimate Std. Error t value Pr(>|t|)  
-    ## (Intercept)   -6.523      2.511  -2.597   0.0128 *
-    ## high_degree    5.886      2.896   2.032   0.0483 *
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.6274 on 43 degrees of freedom
-    ## Multiple R-squared:  0.08765,    Adjusted R-squared:  0.06643 
-    ## F-statistic: 4.131 on 1 and 43 DF,  p-value: 0.04831
 
 **non citizen**
 
@@ -426,32 +411,6 @@ summary(noncitizen)
     ## Multiple R-squared:  0.0593, Adjusted R-squared:  0.03742 
     ## F-statistic:  2.71 on 1 and 43 DF,  p-value: 0.107
 
-``` r
-noncitizen_ = 
- lm(lg ~ non_citizen, data = hc_df_log)
-
-summary(noncitizen_)
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = lg ~ non_citizen, data = hc_df_log)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -1.28098 -0.47432 -0.06726  0.39582  1.68638 
-    ## 
-    ## Coefficients:
-    ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)   -1.579      0.199  -7.936 5.84e-10 ***
-    ## non_citizen    2.847      3.140   0.906     0.37    
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.6506 on 43 degrees of freedom
-    ## Multiple R-squared:  0.01875,    Adjusted R-squared:  -0.004069 
-    ## F-statistic: 0.8217 on 1 and 43 DF,  p-value: 0.3697
-
 **non white**
 
 ``` r
@@ -479,32 +438,6 @@ summary(nonwhite)
     ## Residual standard error: 0.2529 on 43 degrees of freedom
     ## Multiple R-squared:  0.01236,    Adjusted R-squared:  -0.01061 
     ## F-statistic: 0.538 on 1 and 43 DF,  p-value: 0.4672
-
-``` r
-nonwhite_ = 
- lm(lg ~ non_white, data = hc_df_log)
-
-summary(nonwhite_)
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = lg ~ non_white, data = hc_df_log)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -1.25268 -0.51498 -0.06342  0.37672  1.85113 
-    ## 
-    ## Coefficients:
-    ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept) -1.41249    0.23303  -6.062 2.98e-07 ***
-    ## non_white   -0.02923    0.66590  -0.044    0.965    
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.6568 on 43 degrees of freedom
-    ## Multiple R-squared:  4.482e-05,  Adjusted R-squared:  -0.02321 
-    ## F-statistic: 0.001927 on 1 and 43 DF,  p-value: 0.9652
 
 **gini index**
 
@@ -534,32 +467,6 @@ summary(gini)
     ## Multiple R-squared:  0.1448, Adjusted R-squared:  0.1249 
     ## F-statistic:  7.28 on 1 and 43 DF,  p-value: 0.009924
 
-``` r
-gini_ = 
- lm(lg ~ gini_index, data = hc_df_log)
-
-summary(gini_)
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = lg ~ gini_index, data = hc_df_log)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -1.26668 -0.32023 -0.04551  0.38663  1.32392 
-    ## 
-    ## Coefficients:
-    ##             Estimate Std. Error t value Pr(>|t|)  
-    ## (Intercept)   -4.515      2.109  -2.141    0.038 *
-    ## gini_index     6.789      4.623   1.469    0.149  
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.6409 on 43 degrees of freedom
-    ## Multiple R-squared:  0.04776,    Adjusted R-squared:  0.02562 
-    ## F-statistic: 2.157 on 1 and 43 DF,  p-value: 0.1492
-
 **unemployment**
 
 ``` r
@@ -588,32 +495,6 @@ summary(unemployment)
     ## Multiple R-squared:  0.0002747,  Adjusted R-squared:  -0.02297 
     ## F-statistic: 0.01182 on 1 and 43 DF,  p-value: 0.9139
 
-``` r
-unemployment_ = 
- lm(lg ~ unemployment, data = hc_df_log)
-
-summary(unemployment_)
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = lg ~ unemployment, data = hc_df_log)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -1.14546 -0.52433 -0.03384  0.31838  1.94753 
-    ## 
-    ## Coefficients:
-    ##              Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)   -1.0956     0.3073  -3.565 0.000907 ***
-    ## unemployment  -0.2159     0.1931  -1.118 0.269778    
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.6475 on 43 degrees of freedom
-    ## Multiple R-squared:  0.02825,    Adjusted R-squared:  0.005648 
-    ## F-statistic:  1.25 on 1 and 43 DF,  p-value: 0.2698
-
 **urbanization**
 
 ``` r
@@ -640,420 +521,15 @@ summary(urbanization)
     ## Multiple R-squared:  0.04515,    Adjusted R-squared:  0.02294 
     ## F-statistic: 2.033 on 1 and 43 DF,  p-value: 0.1611
 
-``` r
-urbanization_ = 
- lm(lg ~ urbanization, data = hc_df_log)
+We conduct the linear regression between Y and all variables X
+individuals, and the variable “med\_income” and “gini\_index” seem to be
+significant with p value smaller than 0.05.
 
-summary(urbanization_)
-```
+Since “med\_income” and “gini\_index” are significant predictors, then
+we use these two predictors as the basis of the model to explore further
+associations.
 
-    ## 
-    ## Call:
-    ## lm(formula = lg ~ urbanization, data = hc_df_log)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -1.23570 -0.39187 -0.01327  0.37117  1.73166 
-    ## 
-    ## Coefficients:
-    ##              Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)   -1.7843     0.3111  -5.736 8.84e-07 ***
-    ## urbanization   0.2364     0.1929   1.226    0.227    
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.6456 on 43 degrees of freedom
-    ## Multiple R-squared:  0.03375,    Adjusted R-squared:  0.01128 
-    ## F-statistic: 1.502 on 1 and 43 DF,  p-value: 0.227
-
-## MLR
-
-``` r
-mult.fit = lm(rate ~ ., data = hc_df)
-step(mult.fit, direction='backward')
-```
-
-    ## Start:  AIC=-137.03
-    ## rate ~ unemployment + urbanization + med_income + high_degree + 
-    ##     non_citizen + gini_index + non_white
-    ## 
-    ##                Df Sum of Sq    RSS     AIC
-    ## - non_white     1   0.00001 1.5008 -139.03
-    ## - unemployment  1   0.00135 1.5021 -138.99
-    ## - med_income    1   0.00258 1.5034 -138.95
-    ## - urbanization  1   0.00618 1.5070 -138.85
-    ## - non_citizen   1   0.01750 1.5183 -138.51
-    ## <none>                      1.5008 -137.03
-    ## - high_degree   1   0.34889 1.8497 -129.62
-    ## - gini_index    1   0.77465 2.2754 -120.30
-    ## 
-    ## Step:  AIC=-139.03
-    ## rate ~ unemployment + urbanization + med_income + high_degree + 
-    ##     non_citizen + gini_index
-    ## 
-    ##                Df Sum of Sq    RSS     AIC
-    ## - unemployment  1   0.00148 1.5023 -140.99
-    ## - med_income    1   0.00269 1.5035 -140.95
-    ## - urbanization  1   0.00617 1.5070 -140.85
-    ## - non_citizen   1   0.02422 1.5250 -140.31
-    ## <none>                      1.5008 -139.03
-    ## - high_degree   1   0.38759 1.8884 -130.69
-    ## - gini_index    1   0.77888 2.2797 -122.22
-    ## 
-    ## Step:  AIC=-140.99
-    ## rate ~ urbanization + med_income + high_degree + non_citizen + 
-    ##     gini_index
-    ## 
-    ##                Df Sum of Sq    RSS     AIC
-    ## - med_income    1   0.00243 1.5047 -142.91
-    ## - urbanization  1   0.00693 1.5092 -142.78
-    ## - non_citizen   1   0.02401 1.5263 -142.27
-    ## <none>                      1.5023 -140.99
-    ## - high_degree   1   0.40517 1.9074 -132.24
-    ## - gini_index    1   0.78876 2.2910 -124.00
-    ## 
-    ## Step:  AIC=-142.91
-    ## rate ~ urbanization + high_degree + non_citizen + gini_index
-    ## 
-    ##                Df Sum of Sq    RSS     AIC
-    ## - urbanization  1   0.00762 1.5123 -144.69
-    ## - non_citizen   1   0.02232 1.5270 -144.25
-    ## <none>                      1.5047 -142.91
-    ## - gini_index    1   0.78737 2.2921 -125.97
-    ## - high_degree   1   0.86254 2.3672 -124.52
-    ## 
-    ## Step:  AIC=-144.69
-    ## rate ~ high_degree + non_citizen + gini_index
-    ## 
-    ##               Df Sum of Sq    RSS     AIC
-    ## - non_citizen  1   0.01471 1.5270 -146.25
-    ## <none>                     1.5123 -144.69
-    ## - gini_index   1   0.78804 2.3004 -127.81
-    ## - high_degree  1   0.85561 2.3679 -126.51
-    ## 
-    ## Step:  AIC=-146.25
-    ## rate ~ high_degree + gini_index
-    ## 
-    ##               Df Sum of Sq    RSS     AIC
-    ## <none>                     1.5270 -146.25
-    ## - high_degree  1   0.85432 2.3813 -128.25
-    ## - gini_index   1   1.06513 2.5922 -124.44
-
-    ## 
-    ## Call:
-    ## lm(formula = rate ~ high_degree + gini_index, data = hc_df)
-    ## 
-    ## Coefficients:
-    ## (Intercept)  high_degree   gini_index  
-    ##      -8.103        5.059        8.825
-
-rate \~ high\_degree + gini\_index
-
-``` r
-mult.fit = lm(lg ~ ., data = hc_df_log)
-step(mult.fit, direction='backward')
-```
-
-    ## Start:  AIC=-40.88
-    ## lg ~ unemployment + urbanization + med_income + high_degree + 
-    ##     non_citizen + gini_index + non_white
-    ## 
-    ##                Df Sum of Sq    RSS     AIC
-    ## - non_white     1   0.00456 12.719 -42.859
-    ## - non_citizen   1   0.01570 12.730 -42.820
-    ## - med_income    1   0.02556 12.740 -42.785
-    ## - urbanization  1   0.05519 12.770 -42.680
-    ## - unemployment  1   0.37413 13.089 -41.570
-    ## <none>                      12.715 -40.875
-    ## - high_degree   1   1.51318 14.228 -37.815
-    ## - gini_index    1   2.90660 15.621 -33.611
-    ## 
-    ## Step:  AIC=-42.86
-    ## lg ~ unemployment + urbanization + med_income + high_degree + 
-    ##     non_citizen + gini_index
-    ## 
-    ##                Df Sum of Sq    RSS     AIC
-    ## - non_citizen   1   0.01114 12.730 -44.820
-    ## - med_income    1   0.02946 12.749 -44.755
-    ## - urbanization  1   0.05718 12.777 -44.657
-    ## - unemployment  1   0.41699 13.136 -43.408
-    ## <none>                      12.719 -42.859
-    ## - high_degree   1   1.73309 14.452 -39.111
-    ## - gini_index    1   2.90620 15.626 -35.599
-    ## 
-    ## Step:  AIC=-44.82
-    ## lg ~ unemployment + urbanization + med_income + high_degree + 
-    ##     gini_index
-    ## 
-    ##                Df Sum of Sq    RSS     AIC
-    ## - med_income    1   0.01910 12.750 -46.752
-    ## - urbanization  1   0.11092 12.841 -46.429
-    ## - unemployment  1   0.41466 13.145 -45.377
-    ## <none>                      12.730 -44.820
-    ## - high_degree   1   1.92883 14.659 -40.471
-    ## - gini_index    1   3.00737 15.738 -37.277
-    ## 
-    ## Step:  AIC=-46.75
-    ## lg ~ unemployment + urbanization + high_degree + gini_index
-    ## 
-    ##                Df Sum of Sq    RSS     AIC
-    ## - urbanization  1   0.09183 12.841 -48.429
-    ## - unemployment  1   0.40424 13.154 -47.348
-    ## <none>                      12.750 -46.752
-    ## - gini_index    1   3.02492 15.774 -39.172
-    ## - high_degree   1   3.15688 15.906 -38.797
-    ## 
-    ## Step:  AIC=-48.43
-    ## lg ~ unemployment + high_degree + gini_index
-    ## 
-    ##                Df Sum of Sq    RSS     AIC
-    ## - unemployment  1    0.3655 13.207 -49.166
-    ## <none>                      12.841 -48.429
-    ## - high_degree   1    3.3459 16.187 -40.010
-    ## - gini_index    1    4.0555 16.897 -38.079
-    ## 
-    ## Step:  AIC=-49.17
-    ## lg ~ high_degree + gini_index
-    ## 
-    ##               Df Sum of Sq    RSS     AIC
-    ## <none>                     13.207 -49.166
-    ## - gini_index   1    3.7171 16.924 -40.007
-    ## - high_degree  1    4.4569 17.664 -38.081
-
-    ## 
-    ## Call:
-    ## lm(formula = lg ~ high_degree + gini_index, data = hc_df_log)
-    ## 
-    ## Coefficients:
-    ## (Intercept)  high_degree   gini_index  
-    ##      -18.95        11.55        16.49
-
-lg \~ high\_degree + gini\_index
-
-``` r
-# ????
-# three covariates
-# rate ~ income + gini +unemployment
-# log ~  income + degree
-# aic ~ degree +gini
-
-# focus on income + degree + gini and their interaction, maybe adjust for different levels of unemployment
-```
-
-## interaction
-
-??
-
-``` r
-interaction = 
-  lm(rate ~ med_income + high_degree + gini_index + med_income * high_degree + med_income * gini_index + high_degree * gini_index + med_income * high_degree * gini_index, data = hc_df)
-summary(interaction)
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = rate ~ med_income + high_degree + gini_index + med_income * 
-    ##     high_degree + med_income * gini_index + high_degree * gini_index + 
-    ##     med_income * high_degree * gini_index, data = hc_df)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -0.42731 -0.08045 -0.01514  0.09041  0.51987 
-    ## 
-    ## Coefficients:
-    ##                                     Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)                        7.797e+01  1.656e+02   0.471    0.640
-    ## med_income                        -2.238e-03  2.858e-03  -0.783    0.439
-    ## high_degree                       -6.830e+01  1.910e+02  -0.358    0.723
-    ## gini_index                        -1.530e+02  3.653e+02  -0.419    0.678
-    ## med_income:high_degree             2.153e-03  3.280e-03   0.656    0.516
-    ## med_income:gini_index              4.468e-03  6.298e-03   0.709    0.483
-    ## high_degree:gini_index             1.297e+02  4.221e+02   0.307    0.760
-    ## med_income:high_degree:gini_index -4.216e-03  7.240e-03  -0.582    0.564
-    ## 
-    ## Residual standard error: 0.1735 on 37 degrees of freedom
-    ## Multiple R-squared:  0.6002, Adjusted R-squared:  0.5246 
-    ## F-statistic: 7.935 on 7 and 37 DF,  p-value: 7.26e-06
-
-``` r
-interaction_ = 
-  lm(lg ~ med_income + high_degree + gini_index + med_income * high_degree + med_income * gini_index + high_degree * gini_index + med_income * high_degree * gini_index, data = hc_df_log)
-summary(interaction_)
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = lg ~ med_income + high_degree + gini_index + med_income * 
-    ##     high_degree + med_income * gini_index + high_degree * gini_index + 
-    ##     med_income * high_degree * gini_index, data = hc_df_log)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -1.31748 -0.43474  0.09948  0.42947  1.12477 
-    ## 
-    ## Coefficients:
-    ##                                     Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)                       -7.292e+01  5.482e+02  -0.133    0.895
-    ## med_income                         1.934e-04  9.462e-03   0.020    0.984
-    ## high_degree                        1.142e+02  6.324e+02   0.181    0.858
-    ## gini_index                         1.749e+02  1.209e+03   0.145    0.886
-    ## med_income:high_degree            -8.704e-04  1.086e-02  -0.080    0.937
-    ## med_income:gini_index             -1.060e-03  2.085e-02  -0.051    0.960
-    ## high_degree:gini_index            -2.718e+02  1.397e+03  -0.195    0.847
-    ## med_income:high_degree:gini_index  2.648e-03  2.397e-02   0.110    0.913
-    ## 
-    ## Residual standard error: 0.5742 on 37 degrees of freedom
-    ## Multiple R-squared:  0.3422, Adjusted R-squared:  0.2178 
-    ## F-statistic:  2.75 on 7 and 37 DF,  p-value: 0.02099
-
-## Correlation
-
-``` r
-hc_df %>% cor() %>% round(., 2)
-```
-
-    ##              unemployment urbanization med_income high_degree non_citizen
-    ## unemployment         1.00         0.24      -0.25       -0.45        0.24
-    ## urbanization         0.24         1.00       0.26       -0.16        0.68
-    ## med_income          -0.25         0.26       1.00        0.65        0.30
-    ## high_degree         -0.45        -0.16       0.65        1.00       -0.26
-    ## non_citizen          0.24         0.68       0.30       -0.26        1.00
-    ## gini_index           0.41         0.43      -0.13       -0.54        0.48
-    ## non_white            0.43         0.51       0.04       -0.50        0.75
-    ## rate                -0.02         0.21       0.34        0.26        0.24
-    ##              gini_index non_white  rate
-    ## unemployment       0.41      0.43 -0.02
-    ## urbanization       0.43      0.51  0.21
-    ## med_income        -0.13      0.04  0.34
-    ## high_degree       -0.54     -0.50  0.26
-    ## non_citizen        0.48      0.75  0.24
-    ## gini_index         1.00      0.55  0.38
-    ## non_white          0.55      1.00  0.11
-    ## rate               0.38      0.11  1.00
-
-## regression of all numeric variables
-
-``` r
-reg_all = lm(rate ~ med_income + high_degree + non_citizen + gini_index + non_white, data = hc_df)
- summary(reg_all)
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = rate ~ med_income + high_degree + non_citizen + 
-    ##     gini_index + non_white, data = hc_df)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -0.36737 -0.10005 -0.01877  0.09497  0.52855 
-    ## 
-    ## Coefficients:
-    ##               Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept) -8.170e+00  1.841e+00  -4.437 7.25e-05 ***
-    ## med_income  -1.589e-06  5.773e-06  -0.275  0.78461    
-    ## high_degree  5.399e+00  1.788e+00   3.020  0.00444 ** 
-    ## non_citizen  9.374e-01  1.643e+00   0.571  0.57154    
-    ## gini_index   8.417e+00  1.873e+00   4.495 6.08e-05 ***
-    ## non_white   -1.723e-02  3.485e-01  -0.049  0.96082    
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.1967 on 39 degrees of freedom
-    ## Multiple R-squared:  0.458,  Adjusted R-squared:  0.3885 
-    ## F-statistic: 6.592 on 5 and 39 DF,  p-value: 0.0001558
-
-## stepwise
-
-``` r
-#hc_df$unemployment <-ifelse(hc_df$unemployment=="high",1,ifelse(hc_df$unemployment=="low", 0, NA))
-
-#hc_df$urbanization <-ifelse(hc_df$urbanization=="high",1,ifelse(hc_df$urbanization=="low", 0, NA))
-
- #hc_df = 
- # hc_df %>% 
- # select(-state)  
-
-model =  
-  lm(rate ~ ., data = hc_df) 
-
- step(model, direction = 'backward')
-```
-
-    ## Start:  AIC=-137.03
-    ## rate ~ unemployment + urbanization + med_income + high_degree + 
-    ##     non_citizen + gini_index + non_white
-    ## 
-    ##                Df Sum of Sq    RSS     AIC
-    ## - non_white     1   0.00001 1.5008 -139.03
-    ## - unemployment  1   0.00135 1.5021 -138.99
-    ## - med_income    1   0.00258 1.5034 -138.95
-    ## - urbanization  1   0.00618 1.5070 -138.85
-    ## - non_citizen   1   0.01750 1.5183 -138.51
-    ## <none>                      1.5008 -137.03
-    ## - high_degree   1   0.34889 1.8497 -129.62
-    ## - gini_index    1   0.77465 2.2754 -120.30
-    ## 
-    ## Step:  AIC=-139.03
-    ## rate ~ unemployment + urbanization + med_income + high_degree + 
-    ##     non_citizen + gini_index
-    ## 
-    ##                Df Sum of Sq    RSS     AIC
-    ## - unemployment  1   0.00148 1.5023 -140.99
-    ## - med_income    1   0.00269 1.5035 -140.95
-    ## - urbanization  1   0.00617 1.5070 -140.85
-    ## - non_citizen   1   0.02422 1.5250 -140.31
-    ## <none>                      1.5008 -139.03
-    ## - high_degree   1   0.38759 1.8884 -130.69
-    ## - gini_index    1   0.77888 2.2797 -122.22
-    ## 
-    ## Step:  AIC=-140.99
-    ## rate ~ urbanization + med_income + high_degree + non_citizen + 
-    ##     gini_index
-    ## 
-    ##                Df Sum of Sq    RSS     AIC
-    ## - med_income    1   0.00243 1.5047 -142.91
-    ## - urbanization  1   0.00693 1.5092 -142.78
-    ## - non_citizen   1   0.02401 1.5263 -142.27
-    ## <none>                      1.5023 -140.99
-    ## - high_degree   1   0.40517 1.9074 -132.24
-    ## - gini_index    1   0.78876 2.2910 -124.00
-    ## 
-    ## Step:  AIC=-142.91
-    ## rate ~ urbanization + high_degree + non_citizen + gini_index
-    ## 
-    ##                Df Sum of Sq    RSS     AIC
-    ## - urbanization  1   0.00762 1.5123 -144.69
-    ## - non_citizen   1   0.02232 1.5270 -144.25
-    ## <none>                      1.5047 -142.91
-    ## - gini_index    1   0.78737 2.2921 -125.97
-    ## - high_degree   1   0.86254 2.3672 -124.52
-    ## 
-    ## Step:  AIC=-144.69
-    ## rate ~ high_degree + non_citizen + gini_index
-    ## 
-    ##               Df Sum of Sq    RSS     AIC
-    ## - non_citizen  1   0.01471 1.5270 -146.25
-    ## <none>                     1.5123 -144.69
-    ## - gini_index   1   0.78804 2.3004 -127.81
-    ## - high_degree  1   0.85561 2.3679 -126.51
-    ## 
-    ## Step:  AIC=-146.25
-    ## rate ~ high_degree + gini_index
-    ## 
-    ##               Df Sum of Sq    RSS     AIC
-    ## <none>                     1.5270 -146.25
-    ## - high_degree  1   0.85432 2.3813 -128.25
-    ## - gini_index   1   1.06513 2.5922 -124.44
-
-    ## 
-    ## Call:
-    ## lm(formula = rate ~ high_degree + gini_index, data = hc_df)
-    ## 
-    ## Coefficients:
-    ## (Intercept)  high_degree   gini_index  
-    ##      -8.103        5.059        8.825
-
-## Forward
+## use “gini\_index” as the model basis
 
 ``` r
 # step1
@@ -1276,7 +752,10 @@ tidy(fit5)
     ## 3 high_degree   5.18       1.10      4.71  0.0000288 
     ## 4 non_white     0.0914     0.244     0.375 0.710
 
-model based on income
+Based on the results, the significant predictors are “gini\_index” and
+“high\_degree”.
+
+## use “med\_income” as the model basis
 
 ``` r
 income_reg = lm(rate ~ med_income, data = hc_df)
@@ -1420,7 +899,99 @@ tidy(fit5)
     ## 3 gini_index   6.60      1.87            3.53 0.00104 
     ## 4 non_white   -0.349     0.261          -1.34 0.189
 
-outcome: rate \~ med\_income + gini\_index
+Based on the results, the significant predictors are “gini\_index” and
+“med\_income”.
+
+So based on the previous two methods with basis of “gini\_index” and
+“med\_income”, the “gini\_index” is significant in both cases. So the
+“gini\_index” seems to be main predictor of the hate crimes.
+
+## Stepwise method
+
+``` r
+mult.fit = lm(rate ~ ., data = hc_df)
+step(mult.fit, direction='backward')
+```
+
+    ## Start:  AIC=-137.03
+    ## rate ~ unemployment + urbanization + med_income + high_degree + 
+    ##     non_citizen + gini_index + non_white
+    ## 
+    ##                Df Sum of Sq    RSS     AIC
+    ## - non_white     1   0.00001 1.5008 -139.03
+    ## - unemployment  1   0.00135 1.5021 -138.99
+    ## - med_income    1   0.00258 1.5034 -138.95
+    ## - urbanization  1   0.00618 1.5070 -138.85
+    ## - non_citizen   1   0.01750 1.5183 -138.51
+    ## <none>                      1.5008 -137.03
+    ## - high_degree   1   0.34889 1.8497 -129.62
+    ## - gini_index    1   0.77465 2.2754 -120.30
+    ## 
+    ## Step:  AIC=-139.03
+    ## rate ~ unemployment + urbanization + med_income + high_degree + 
+    ##     non_citizen + gini_index
+    ## 
+    ##                Df Sum of Sq    RSS     AIC
+    ## - unemployment  1   0.00148 1.5023 -140.99
+    ## - med_income    1   0.00269 1.5035 -140.95
+    ## - urbanization  1   0.00617 1.5070 -140.85
+    ## - non_citizen   1   0.02422 1.5250 -140.31
+    ## <none>                      1.5008 -139.03
+    ## - high_degree   1   0.38759 1.8884 -130.69
+    ## - gini_index    1   0.77888 2.2797 -122.22
+    ## 
+    ## Step:  AIC=-140.99
+    ## rate ~ urbanization + med_income + high_degree + non_citizen + 
+    ##     gini_index
+    ## 
+    ##                Df Sum of Sq    RSS     AIC
+    ## - med_income    1   0.00243 1.5047 -142.91
+    ## - urbanization  1   0.00693 1.5092 -142.78
+    ## - non_citizen   1   0.02401 1.5263 -142.27
+    ## <none>                      1.5023 -140.99
+    ## - high_degree   1   0.40517 1.9074 -132.24
+    ## - gini_index    1   0.78876 2.2910 -124.00
+    ## 
+    ## Step:  AIC=-142.91
+    ## rate ~ urbanization + high_degree + non_citizen + gini_index
+    ## 
+    ##                Df Sum of Sq    RSS     AIC
+    ## - urbanization  1   0.00762 1.5123 -144.69
+    ## - non_citizen   1   0.02232 1.5270 -144.25
+    ## <none>                      1.5047 -142.91
+    ## - gini_index    1   0.78737 2.2921 -125.97
+    ## - high_degree   1   0.86254 2.3672 -124.52
+    ## 
+    ## Step:  AIC=-144.69
+    ## rate ~ high_degree + non_citizen + gini_index
+    ## 
+    ##               Df Sum of Sq    RSS     AIC
+    ## - non_citizen  1   0.01471 1.5270 -146.25
+    ## <none>                     1.5123 -144.69
+    ## - gini_index   1   0.78804 2.3004 -127.81
+    ## - high_degree  1   0.85561 2.3679 -126.51
+    ## 
+    ## Step:  AIC=-146.25
+    ## rate ~ high_degree + gini_index
+    ## 
+    ##               Df Sum of Sq    RSS     AIC
+    ## <none>                     1.5270 -146.25
+    ## - high_degree  1   0.85432 2.3813 -128.25
+    ## - gini_index   1   1.06513 2.5922 -124.44
+
+    ## 
+    ## Call:
+    ## lm(formula = rate ~ high_degree + gini_index, data = hc_df)
+    ## 
+    ## Coefficients:
+    ## (Intercept)  high_degree   gini_index  
+    ##      -8.103        5.059        8.825
+
+The stepwise method shows the relationship； rate \~ high\_degree +
+gini\_index.
+
+The results are similar to the previous model, showing the
+“high\_degree” and “gini\_index” are significant.
 
 # InteractIon check
 
@@ -1436,7 +1007,7 @@ hc_df %>%
 
     ## `geom_smooth()` using formula 'y ~ x'
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-29-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-16-1.png" width="90%" />
 
 urbanization & gini\_index
 
@@ -1450,20 +1021,7 @@ hc_df %>%
 
     ## `geom_smooth()` using formula 'y ~ x'
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-30-1.png" width="90%" />
-
-urbanization & income
-
-``` r
-hc_df %>% 
-  ggplot(aes(x = med_income, y = rate, color = factor(urbanization))) +
-  geom_point() +
-  stat_smooth(method = "lm", se = F)
-```
-
-    ## `geom_smooth()` using formula 'y ~ x'
-
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-31-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-17-1.png" width="90%" />
 
 unemployment & high\_degree
 
@@ -1477,7 +1035,7 @@ hc_df %>%
 
     ## `geom_smooth()` using formula 'y ~ x'
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-32-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-18-1.png" width="90%" />
 
 unemployment & gini
 
@@ -1491,36 +1049,23 @@ hc_df %>%
 
     ## `geom_smooth()` using formula 'y ~ x'
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-33-1.png" width="90%" />
-
-unemployment & income
-
-``` r
-hc_df %>% 
-  ggplot(aes(x = med_income, y = rate, color = factor(unemployment))) +
-  geom_point() +
-  stat_smooth(method = "lm", se = F)
-```
-
-    ## `geom_smooth()` using formula 'y ~ x'
-
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-34-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-19-1.png" width="90%" />
 
 We check the interaction for `urbanization` and `unemployment` among
-`income`, `high_degree`, and `gini_index` and find that the three
-variables all have interactions with urbanizaiotn and unemployment. Next
-step, we will check whether the interaction term is significant.
+`high_degree`, and `gini_index` and find that the two variables have
+interactions with urbanization and unemployment. Next step, we will
+check whether the interaction term is significant.
 
 # add interaction to model and check significance
 
 initial:
 
 ``` r
-aic = 
+model = 
   hc_df %>% 
   lm(rate ~ high_degree + gini_index, data = .)
 
-summary(aic)
+summary(model)
 ```
 
     ## 
@@ -1543,33 +1088,6 @@ summary(aic)
     ## Multiple R-squared:  0.4516, Adjusted R-squared:  0.4255 
     ## F-statistic: 17.29 on 2 and 42 DF,  p-value: 3.32e-06
 
-``` r
-income_main = 
-  hc_df %>% 
-  lm(rate ~ med_income + gini_index, data = . )
-summary(income_main)
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = rate ~ med_income + gini_index, data = .)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -0.37873 -0.12917 -0.03933  0.07706  0.67751 
-    ## 
-    ## Coefficients:
-    ##               Estimate Std. Error t value Pr(>|t|)   
-    ## (Intercept) -2.688e+00  7.663e-01  -3.507  0.00109 **
-    ## med_income   1.120e-05  3.642e-06   3.075  0.00369 **
-    ## gini_index   5.203e+00  1.565e+00   3.325  0.00184 **
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.2151 on 42 degrees of freedom
-    ## Multiple R-squared:  0.3019, Adjusted R-squared:  0.2687 
-    ## F-statistic: 9.083 on 2 and 42 DF,  p-value: 0.0005272
-
 add interaction:
 
 1.  check for adding all interactions for the two models
@@ -1577,11 +1095,11 @@ add interaction:
 <!-- end list -->
 
 ``` r
-inter_model_aic1= 
+inter_model_1= 
   hc_df %>% 
   lm(rate ~ high_degree * gini_index * urbanization , data = .)
 
-summary(inter_model_aic1)
+summary(inter_model_1)
 ```
 
     ## 
@@ -1609,11 +1127,11 @@ summary(inter_model_aic1)
     ## F-statistic: 4.773 on 7 and 37 DF,  p-value: 0.0006716
 
 ``` r
-inter_model_aic2 = 
+inter_model_2 = 
   hc_df %>% 
   lm(rate ~ high_degree * gini_index * unemployment, data = .)
 
-summary(inter_model_aic2)
+summary(inter_model_2)
 ```
 
     ## 
@@ -1640,84 +1158,20 @@ summary(inter_model_aic2)
     ## Multiple R-squared:  0.4719, Adjusted R-squared:  0.372 
     ## F-statistic: 4.723 on 7 and 37 DF,  p-value: 0.0007269
 
-``` r
-inter_model_income1 = 
-  hc_df %>% 
-  lm(rate ~ med_income * gini_index * urbanization, data = .)
+Conclude: we find that the interaction terms are not significant since
+the p values are larger than 0.05, so we will not add them into the
+models.
 
-summary(inter_model_income1)
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = rate ~ med_income * gini_index * urbanization, data = .)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -0.42834 -0.11255 -0.01696  0.07826  0.50533 
-    ## 
-    ## Coefficients:
-    ##                                      Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)                        -6.273e+00  1.966e+01  -0.319    0.751
-    ## med_income                          9.422e-05  3.690e-04   0.255    0.800
-    ## gini_index                          1.312e+01  4.396e+01   0.298    0.767
-    ## urbanization                        1.383e+01  1.217e+01   1.137    0.263
-    ## med_income:gini_index              -1.842e-04  8.366e-04  -0.220    0.827
-    ## med_income:urbanization            -2.357e-04  2.161e-04  -1.091    0.282
-    ## gini_index:urbanization            -2.998e+01  2.682e+01  -1.118    0.271
-    ## med_income:gini_index:urbanization  5.113e-04  4.825e-04   1.060    0.296
-    ## 
-    ## Residual standard error: 0.1972 on 37 degrees of freedom
-    ## Multiple R-squared:  0.4832, Adjusted R-squared:  0.3854 
-    ## F-statistic: 4.941 on 7 and 37 DF,  p-value: 0.0005141
-
-``` r
-inter_model_income2 = 
-  hc_df %>% 
-  lm(rate ~ med_income * gini_index * unemployment, data = .)
-
-summary(inter_model_income2)
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = rate ~ med_income * gini_index * unemployment, data = .)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -0.37760 -0.10759 -0.01941  0.07814  0.53562 
-    ## 
-    ## Coefficients:
-    ##                                      Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)                        -3.109e+00  2.064e+01  -0.151    0.881
-    ## med_income                          2.056e-05  3.490e-04   0.059    0.953
-    ## gini_index                          5.260e+00  4.582e+01   0.115    0.909
-    ## unemployment                        1.319e+01  1.296e+01   1.017    0.316
-    ## med_income:gini_index              -3.087e-06  7.773e-04  -0.004    0.997
-    ## med_income:unemployment            -2.138e-04  2.122e-04  -1.008    0.320
-    ## gini_index:unemployment            -2.796e+01  2.844e+01  -0.983    0.332
-    ## med_income:gini_index:unemployment  4.507e-04  4.667e-04   0.966    0.340
-    ## 
-    ## Residual standard error: 0.1953 on 37 degrees of freedom
-    ## Multiple R-squared:  0.4933, Adjusted R-squared:  0.3975 
-    ## F-statistic: 5.146 on 7 and 37 DF,  p-value: 0.0003732
-
-Conclude: we find that the interaction terms are not significant, and we
-will not add them into the models.
-
-Model 1: rate \~ high\_degree + gini\_index
-
-Model 2: rate \~ income + gini\_index
+So the final model is rate \~ high\_degree + gini\_index
 
 ``` r
 model_1 = lm(rate ~ high_degree + gini_index, data = hc_df)
-model_2 = lm(rate ~ med_income + gini_index, data = hc_df)
+
 model = lm(rate ~ ., data = hc_df)
 ```
 
 ``` r
 cp_1 = ols_mallows_cp(model_1, model)
-cp_2 = ols_mallows_cp(model_2, model)
 
 cp_1
 ```
@@ -1725,14 +1179,7 @@ cp_1
     ## [1] -1.352896
 
 ``` r
-cp_2
-```
-
-    ## [1] 8.921808
-
-``` r
 mse_1 = get_mse(model_1, var.estimate = FALSE)
-mse_2 = get_mse(model_2, var.estimate = FALSE)
 
 mse_1
 ```
@@ -1740,14 +1187,40 @@ mse_1
     ## [1] 0.03635776
 
 ``` r
-mse_2
+cv_df =
+  crossv_mc(hc_df, 100) %>% 
+  mutate(
+    train = map(train, as_tibble),
+    test = map(test, as_tibble))
+
+cv_df = 
+  cv_df %>% 
+  mutate(
+    linear_mod  = map(train, ~lm(rate ~ gini_index + high_degree, data = .x))) %>% 
+  mutate(
+    rmse_linear = map2_dbl(linear_mod, test, ~rmse(model = .x, data = .y)))
+
+
+cv_df %>% 
+  select(starts_with("rmse")) %>% 
+  pivot_longer(
+    everything(),
+    names_to = "model", 
+    values_to = "rmse",
+    names_prefix = "rmse_") %>% 
+  ggplot(aes(x = model, y = rmse)) + geom_violin()
 ```
 
-    ## [1] 0.04628057
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-26-1.png" width="90%" />
+
+``` r
+mean(cv_df$rmse_linear)
+```
+
+    ## [1] 0.2178795
 
 ``` r
 model_1_summ = summary(model_1)
-model_2_summ = summary(model_2)
 
 model_1_summ$adj.r.squared
 ```
@@ -1755,21 +1228,8 @@ model_1_summ$adj.r.squared
     ## [1] 0.4254814
 
 ``` r
-model_2_summ$adj.r.squared
-```
-
-    ## [1] 0.2686829
-
-``` r
 par(mfrow=c(2,2))
 plot(model_1)
 ```
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-44-1.png" width="90%" />
-
-``` r
-par(mfrow=c(2,2))
-plot(model_2)
-```
-
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-45-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-28-1.png" width="90%" />
