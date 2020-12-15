@@ -139,7 +139,8 @@ hc_df =
          non_white = perc_non_white)
 ```
 
-    ## Parsed with column specification:
+    ## 
+    ## -- Column specification --------------------------------------------------------
     ## cols(
     ##   state = col_character(),
     ##   unemployment = col_character(),
@@ -159,13 +160,13 @@ head(hc_df)
     ## # A tibble: 6 x 9
     ##   state unemployment urbanization med_income high_degree non_citizen gini_index
     ##   <chr> <chr>        <chr>             <dbl>       <dbl>       <dbl>      <dbl>
-    ## 1 Alab… high         low               42278       0.821        0.02      0.472
-    ## 2 Alas… high         low               67629       0.914        0.04      0.422
-    ## 3 Ariz… high         high              49254       0.842        0.1       0.455
-    ## 4 Arka… high         low               44922       0.824        0.04      0.458
-    ## 5 Cali… high         high              60487       0.806        0.13      0.471
-    ## 6 Colo… low          high              60940       0.893        0.06      0.457
-    ## # … with 2 more variables: non_white <dbl>, rate <dbl>
+    ## 1 Alab~ high         low               42278       0.821        0.02      0.472
+    ## 2 Alas~ high         low               67629       0.914        0.04      0.422
+    ## 3 Ariz~ high         high              49254       0.842        0.1       0.455
+    ## 4 Arka~ high         low               44922       0.824        0.04      0.458
+    ## 5 Cali~ high         high              60487       0.806        0.13      0.471
+    ## 6 Colo~ low          high              60940       0.893        0.06      0.457
+    ## # ... with 2 more variables: non_white <dbl>, rate <dbl>
 
 Description by table?
 
@@ -907,6 +908,29 @@ summary(interaction_)
     ## F-statistic:  2.75 on 7 and 37 DF,  p-value: 0.02099
 
 ## Correlation
+
+``` r
+hc_df %>% cor() %>% round(., 2)
+```
+
+    ##              unemployment urbanization med_income high_degree non_citizen
+    ## unemployment         1.00         0.24      -0.25       -0.45        0.24
+    ## urbanization         0.24         1.00       0.26       -0.16        0.68
+    ## med_income          -0.25         0.26       1.00        0.65        0.30
+    ## high_degree         -0.45        -0.16       0.65        1.00       -0.26
+    ## non_citizen          0.24         0.68       0.30       -0.26        1.00
+    ## gini_index           0.41         0.43      -0.13       -0.54        0.48
+    ## non_white            0.43         0.51       0.04       -0.50        0.75
+    ## rate                -0.02         0.21       0.34        0.26        0.24
+    ##              gini_index non_white  rate
+    ## unemployment       0.41      0.43 -0.02
+    ## urbanization       0.43      0.51  0.21
+    ## med_income        -0.13      0.04  0.34
+    ## high_degree       -0.54     -0.50  0.26
+    ## non_citizen        0.48      0.75  0.24
+    ## gini_index         1.00      0.55  0.38
+    ## non_white          0.55      1.00  0.11
+    ## rate               0.38      0.11  1.00
 
 ## regression of all numeric variables
 

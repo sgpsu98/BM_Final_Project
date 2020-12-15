@@ -386,7 +386,7 @@ summary(interaction_)
 
 ## Correlation
 
-```{r eval=FALSE, include=FALSE}
+```{r }
 
 hc_df %>% cor() %>% round(., 2)
 ```
