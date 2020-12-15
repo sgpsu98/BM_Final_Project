@@ -45,7 +45,10 @@ library(skimr)
 
 
 # Introduction
-Hate crime is a significant issue under the present circumstances. There exist multiple variables related to hate crime. In this project, we intend to find the relationships between the hate crime rate and the eight variables. Among the eight variables, income status is about unemployment level, medians of household income, and Gini index in the dataset. Especially, the Gini index is a measure of the distribution of income across a population developed by the Italian statistician Corrado Gini in 1912. [1] In real life, the high-valued Gini index implies the high levels of inequality in the whole society. Also, the high unemployment rate will lower the medians of household income. People without employment are more likely to participate in hate crime. [2] Besides, the education level matters in income status. A higher level of education status, like the high-school degree in this study, will lead to an occupation with a higher salary, which can increase the medians of household income and decrease unemployment. 
+
+Hate crime is a significant issue under the present circumstances. There exist multiple variables related to hate crime. In this project, we intend to find the relationships between the hate crime rate and the eight variables. 
+
+Among the eight variables, income status is about unemployment level, medians of household income, and Gini index in the dataset. Especially, the Gini index is a measure of the distribution of income across a population developed by the Italian statistician Corrado Gini in 1912. [1] In real life, the high-valued Gini index implies the high levels of inequality in the whole society. Also, the high unemployment rate will lower the medians of household income. People without employment are more likely to participate in hate crime. [2] Besides, the education level matters in income status. A higher level of education status, like the high-school degree in this study, will lead to an occupation with a higher salary, which can increase the medians of household income and decrease unemployment. 
 
 
 
@@ -106,29 +109,13 @@ head(hc_df)
 ```
 
 Description by table?
-
 ```{r}
-my_controls <- tableby.control(
-               total = T, # do you wanna show he overall col?
-               test=F,  # No test p-values yet
-               numeric.stats = c("meansd", "medianq1q3", "range", "Nmiss2"), # for the continuous var. (a.k.a numeric var.) 
-               cat.stats = c("countpct", "Nmiss2"), # for categorical var., we select the count, percentage, and missing values.
-               stats.labels = list(
-               meansd = "Mean (SD)",
-               medianq1q3 = "Median (Q1, Q3)",
-               range = "Min - Max",
-               Nmiss2 = "Missing",
-               countpct = "N (%)"))
-
-
-## or use skim()
-
-
-#summary(tab1, title = "Descriptive statistics ", text = T,  digits = 1) %>%  knitr::kable()   
+skim(hc_df)
 ```
 
 
-### change "unemployment" and "urbanization" from characters to corresponding numbers
+
+### change "unemployment" and "urbanization" from characters to corresponding numbers "1","2"
 
 use 1 and 2 to denote the level low and high
 
@@ -145,8 +132,7 @@ hc_df =
       urbanization == "low" ~ 1,
       urbanization == "high" ~ 2)
   ) %>% 
-  #mutate(urbanization = as.factor(urbanization),
-  #       unemployment = as.factor(unemployment)) %>% 
+  
   select(-state)
 ```
 
@@ -159,7 +145,7 @@ hc_df %>%
   geom_histogram(fill = "blue", alpha = .4) +
   geom_density(aes( x = rate, y = ..density..)) +
   theme_bw() +
-  labs(title = "Distribution for hate crimes per 100k",
+  labs(title = "Figure1. Distribution for hate crimes per 100k",
        x = "hate crimes per 100k splc",
        y = " Count") +
   theme(plot.title = element_text(hjust = .5 ))
@@ -174,10 +160,10 @@ hc_df_log =
 
 hc_df_log%>% 
   ggplot(aes(x = lg, y = ..density..)) +
-  geom_histogram(fill = "blue", alpha = .4) +
+  geom_histogram(fill = "blue", alpha = .4, binwidth = 0.2) +
   geom_density(aes( lg, y = ..density..)) +
   theme_bw() +
-  labs(title = "Distribution for Log ",
+  labs(title = "Figure2. Distribution for Log ",
        x = "Log (hate crimes per 100k splc)",
        y = " Count") +
   theme(plot.title = element_text(hjust = .5 ))
@@ -186,21 +172,20 @@ hc_df_log%>%
 ```
 
 ```{r}
-# Histogram - notice the severe right skew
-hist(hc_df_log$lg, xlab="log(hate crimes per 100k splc)", freq=T, col=2)
 
 # Create a quantile-quantile plot (QQplot)
-qqnorm(hc_df_log$lg, col=2, pch=19, cex=1.5)
+qqnorm(hc_df_log$lg, col=2, pch=19, cex=1.5, main = "Figure3. Normal Q-Q Plot")
 
 # Add a straight line which passes through the first and third quartiles.
 qqline(hc_df_log$lg, col = 1,lwd=2,lty=2)
 ```
+
+
 Based on the QQ plot in terms of the log(hate crimes per 100k splc), the points are nearly distributed along the straight line, so there is not severe departure from the normality.
 
 ```{r}
 # Perform Shapiro-Wilk test
-shapiro.test(hc_df_log$lg)
-
+shapiro.test(hc_df_log$lg) 
 ```
 
 
@@ -228,11 +213,6 @@ income =
  lm(rate ~ med_income, data = hc_df)
 summary(income)
 ```
-```{r}
-income_ = 
-  lm(lg ~ med_income, data = hc_df_log)
-summary(income_)
-```
 
 
 **high school degree**
@@ -243,12 +223,7 @@ degree =
 
 summary(degree)
 ```
-```{r}
-degree_ = 
- lm(lg ~ high_degree, data = hc_df_log)
 
-summary(degree_)
-```
 
 **non citizen**
 
@@ -257,12 +232,6 @@ noncitizen =
  lm(rate ~ non_citizen, data = hc_df)
 
 summary(noncitizen)
-```
-```{r}
-noncitizen_ = 
- lm(lg ~ non_citizen, data = hc_df_log)
-
-summary(noncitizen_)
 ```
 
 
@@ -274,12 +243,6 @@ nonwhite =
 
 summary(nonwhite)
 ```
-```{r}
-nonwhite_ = 
- lm(lg ~ non_white, data = hc_df_log)
-
-summary(nonwhite_)
-```
 
 
 **gini index**
@@ -290,12 +253,7 @@ gini =
 
 summary(gini)
 ```
-```{r}
-gini_ = 
- lm(lg ~ gini_index, data = hc_df_log)
 
-summary(gini_)
-```
 
 **unemployment**
 
@@ -305,12 +263,7 @@ unemployment =
 
 summary(unemployment)
 ```
-```{r}
-unemployment_ = 
- lm(lg ~ unemployment, data = hc_df_log)
 
-summary(unemployment_)
-```
 
 
 **urbanization**
@@ -322,13 +275,10 @@ urbanization =
 summary(urbanization)
 ```
 
+We conduct the linear regression between Y and all variables X individuals, and the variable "med_income" and "gini_index" seem to be significant with p value smaller than 0.05. 
 
-```{r}
-urbanization_ = 
- lm(lg ~ urbanization, data = hc_df_log)
 
-summary(urbanization_)
-```
+
 
 ## MLR
 
