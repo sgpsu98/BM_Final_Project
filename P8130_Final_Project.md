@@ -197,16 +197,16 @@ use 1 and 2 to denote the level low and high
 ``` r
 hc_df = 
   hc_df %>% 
-  mutate(
-    unemployment = case_when(
-      unemployment == "low" ~ 1,
-      unemployment == "high" ~ 2)
-  ) %>% 
-  mutate(
-    urbanization = case_when(
-      urbanization == "low" ~ 1,
-      urbanization == "high" ~ 2)
-  ) %>% 
+  #mutate(
+  #  unemployment = case_when(
+  #    unemployment == "low" ~ 1,
+  #    unemployment == "high" ~ 2)
+  #) %>% 
+  #mutate(
+  #  urbanization = case_when(
+  #    urbanization == "low" ~ 1,
+  #    urbanization == "high" ~ 2)
+  #) %>% 
   mutate(urbanization = as.factor(urbanization),
          unemployment = as.factor(unemployment)) %>% 
   select(-state)
@@ -579,9 +579,9 @@ summary(unemployment)
     ## -0.22934 -0.15510 -0.07308  0.04398  1.22390 
     ## 
     ## Coefficients:
-    ##                Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)    0.306645   0.054246   5.653 1.17e-06 ***
-    ## unemployment2 -0.008248   0.075877  -0.109    0.914    
+    ##                 Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)     0.298398   0.053054   5.624 1.28e-06 ***
+    ## unemploymentlow 0.008248   0.075877   0.109    0.914    
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
@@ -605,9 +605,9 @@ summary(unemployment_)
     ## -1.14546 -0.52433 -0.03384  0.31838  1.94753 
     ## 
     ## Coefficients:
-    ##               Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)    -1.3114     0.1380  -9.501 3.99e-12 ***
-    ## unemployment2  -0.2159     0.1931  -1.118     0.27    
+    ##                 Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)      -1.5273     0.1350 -11.313 1.79e-14 ***
+    ## unemploymentlow   0.2159     0.1931   1.118     0.27    
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
@@ -633,9 +633,9 @@ summary(urbanization)
     ## -0.27357 -0.13829 -0.05521  0.04889  1.17043 
     ## 
     ## Coefficients:
-    ##               Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)    0.24593    0.05426   4.532 4.61e-05 ***
-    ## urbanization2  0.10594    0.07430   1.426    0.161    
+    ##                 Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)      0.35187    0.05076   6.932 1.61e-08 ***
+    ## urbanizationlow -0.10594    0.07430  -1.426    0.161    
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
@@ -659,9 +659,9 @@ summary(urbanization_)
     ## -1.23570 -0.39187 -0.01327  0.37117  1.73166 
     ## 
     ## Coefficients:
-    ##               Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)    -1.5479     0.1409 -10.987  4.6e-14 ***
-    ## urbanization2   0.2364     0.1929   1.226    0.227    
+    ##                 Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)      -1.3114     0.1318  -9.951    1e-12 ***
+    ## urbanizationlow  -0.2364     0.1929  -1.226    0.227    
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
@@ -1042,10 +1042,10 @@ tidy(fit1)
 ```
 
     ## # A tibble: 2 x 5
-    ##   term          estimate std.error statistic    p.value
-    ##   <chr>            <dbl>     <dbl>     <dbl>      <dbl>
-    ## 1 (Intercept)    0.307      0.0542     5.65  0.00000117
-    ## 2 unemployment2 -0.00825    0.0759    -0.109 0.914
+    ##   term            estimate std.error statistic    p.value
+    ##   <chr>              <dbl>     <dbl>     <dbl>      <dbl>
+    ## 1 (Intercept)      0.298      0.0531     5.62  0.00000128
+    ## 2 unemploymentlow  0.00825    0.0759     0.109 0.914
 
 ``` r
 fit2 <- lm(rate ~ urbanization, data = hc_df)
@@ -1053,10 +1053,10 @@ tidy(fit2)
 ```
 
     ## # A tibble: 2 x 5
-    ##   term          estimate std.error statistic   p.value
-    ##   <chr>            <dbl>     <dbl>     <dbl>     <dbl>
-    ## 1 (Intercept)      0.246    0.0543      4.53 0.0000461
-    ## 2 urbanization2    0.106    0.0743      1.43 0.161
+    ##   term            estimate std.error statistic      p.value
+    ##   <chr>              <dbl>     <dbl>     <dbl>        <dbl>
+    ## 1 (Intercept)        0.352    0.0508      6.93 0.0000000161
+    ## 2 urbanizationlow   -0.106    0.0743     -1.43 0.161
 
 ``` r
 fit3 <- lm(rate ~ med_income, data = hc_df)
@@ -1122,11 +1122,11 @@ tidy(fit1)
 ```
 
     ## # A tibble: 3 x 5
-    ##   term          estimate std.error statistic p.value
-    ##   <chr>            <dbl>     <dbl>     <dbl>   <dbl>
-    ## 1 (Intercept)     -2.20     0.825      -2.66 0.0110 
-    ## 2 gini_index       5.60     1.84        3.04 0.00408
-    ## 3 unemployment2   -0.103    0.0762     -1.35 0.184
+    ##   term            estimate std.error statistic p.value
+    ##   <chr>              <dbl>     <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept)       -2.30     0.856      -2.68 0.0103 
+    ## 2 gini_index         5.60     1.84        3.04 0.00408
+    ## 3 unemploymentlow    0.103    0.0762      1.35 0.184
 
 ``` r
 fit2 <- update(forward1, . ~ . +urbanization)
@@ -1134,11 +1134,11 @@ tidy(fit2)
 ```
 
     ## # A tibble: 3 x 5
-    ##   term          estimate std.error statistic p.value
-    ##   <chr>            <dbl>     <dbl>     <dbl>   <dbl>
-    ## 1 (Intercept)    -1.66      0.849     -1.95   0.0573
-    ## 2 gini_index      4.27      1.90       2.25   0.0299
-    ## 3 urbanization2   0.0299    0.0787     0.380  0.706
+    ##   term            estimate std.error statistic p.value
+    ##   <chr>              <dbl>     <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept)      -1.63      0.882     -1.85   0.0719
+    ## 2 gini_index        4.27      1.90       2.25   0.0299
+    ## 3 urbanizationlow  -0.0299    0.0787    -0.380  0.706
 
 ``` r
 fit3 <- update(forward1, . ~ . +med_income)
@@ -1197,12 +1197,12 @@ tidy(fit1)
 ```
 
     ## # A tibble: 4 x 5
-    ##   term          estimate std.error statistic    p.value
-    ##   <chr>            <dbl>     <dbl>     <dbl>      <dbl>
-    ## 1 (Intercept)    -8.07      1.47      -5.49  0.00000232
-    ## 2 gini_index      8.90      1.69       5.26  0.00000483
-    ## 3 high_degree     4.99      1.11       4.51  0.0000536 
-    ## 4 unemployment2  -0.0126    0.0661    -0.191 0.849
+    ##   term            estimate std.error statistic    p.value
+    ##   <chr>              <dbl>     <dbl>     <dbl>      <dbl>
+    ## 1 (Intercept)      -8.09      1.47      -5.52  0.00000211
+    ## 2 gini_index        8.90      1.69       5.26  0.00000483
+    ## 3 high_degree       4.99      1.11       4.51  0.0000536 
+    ## 4 unemploymentlow   0.0126    0.0661     0.191 0.849
 
 ``` r
 fit2 <- update(forward2, . ~ . +urbanization)
@@ -1210,12 +1210,12 @@ tidy(fit2)
 ```
 
     ## # A tibble: 4 x 5
-    ##   term          estimate std.error statistic    p.value
-    ##   <chr>            <dbl>     <dbl>     <dbl>      <dbl>
-    ## 1 (Intercept)   -8.10       1.52     -5.34   0.00000374
-    ## 2 gini_index     8.81       1.81      4.86   0.0000175 
-    ## 3 high_degree    5.06       1.06      4.77   0.0000237 
-    ## 4 urbanization2  0.00111    0.0642    0.0174 0.986
+    ##   term            estimate std.error statistic    p.value
+    ##   <chr>              <dbl>     <dbl>     <dbl>      <dbl>
+    ## 1 (Intercept)     -8.09       1.53     -5.28   0.00000459
+    ## 2 gini_index       8.81       1.81      4.86   0.0000175 
+    ## 3 high_degree      5.06       1.06      4.77   0.0000237 
+    ## 4 urbanizationlow -0.00111    0.0642   -0.0174 0.986
 
 ``` r
 fit3 <- update(forward2, . ~ . +med_income)
@@ -1266,11 +1266,11 @@ tidy(fit1)
 ```
 
     ## # A tibble: 3 x 5
-    ##   term            estimate  std.error statistic p.value
-    ##   <chr>              <dbl>      <dbl>     <dbl>   <dbl>
-    ## 1 (Intercept)   -0.279     0.246         -1.13   0.264 
-    ## 2 med_income     0.0000102 0.00000418     2.43   0.0194
-    ## 3 unemployment2  0.0376    0.0743         0.506  0.616
+    ##   term              estimate  std.error statistic p.value
+    ##   <chr>                <dbl>      <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept)     -0.242     0.228         -1.06   0.295 
+    ## 2 med_income       0.0000102 0.00000418     2.43   0.0194
+    ## 3 unemploymentlow -0.0376    0.0743        -0.506  0.616
 
 ``` r
 fit2 <- update(income_reg, . ~ . +urbanization)
@@ -1278,11 +1278,11 @@ tidy(fit2)
 ```
 
     ## # A tibble: 3 x 5
-    ##   term             estimate  std.error statistic p.value
-    ##   <chr>               <dbl>      <dbl>     <dbl>   <dbl>
-    ## 1 (Intercept)   -0.212      0.226         -0.937  0.354 
-    ## 2 med_income     0.00000867 0.00000417     2.08   0.0437
-    ## 3 urbanization2  0.0656     0.0742         0.885  0.381
+    ##   term               estimate  std.error statistic p.value
+    ##   <chr>                 <dbl>      <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept)     -0.146      0.244         -0.598  0.553 
+    ## 2 med_income       0.00000867 0.00000417     2.08   0.0437
+    ## 3 urbanizationlow -0.0656     0.0742        -0.885  0.381
 
 ``` r
 fit3 <- update(income_reg, . ~ . +gini_index)
@@ -1341,12 +1341,12 @@ tidy(fit1)
 ```
 
     ## # A tibble: 4 x 5
-    ##   term            estimate  std.error statistic  p.value
-    ##   <chr>              <dbl>      <dbl>     <dbl>    <dbl>
-    ## 1 (Intercept)   -2.86      0.801         -3.58  0.000911
-    ## 2 med_income     0.0000105 0.00000375     2.81  0.00760 
-    ## 3 gini_index     5.74      1.71           3.36  0.00170 
-    ## 4 unemployment2 -0.0578    0.0724        -0.798 0.430
+    ##   term              estimate  std.error statistic  p.value
+    ##   <chr>                <dbl>      <dbl>     <dbl>    <dbl>
+    ## 1 (Intercept)     -2.92      0.824         -3.55  0.000994
+    ## 2 med_income       0.0000105 0.00000375     2.81  0.00760 
+    ## 3 gini_index       5.74      1.71           3.36  0.00170 
+    ## 4 unemploymentlow  0.0578    0.0724         0.798 0.430
 
 ``` r
 fit2 <- update(forward1, . ~ . +urbanization)
@@ -1354,12 +1354,12 @@ tidy(fit2)
 ```
 
     ## # A tibble: 4 x 5
-    ##   term            estimate  std.error statistic p.value
-    ##   <chr>              <dbl>      <dbl>     <dbl>   <dbl>
-    ## 1 (Intercept)   -3.00      0.884         -3.39  0.00157
-    ## 2 med_income     0.0000122 0.00000392     3.11  0.00340
-    ## 3 gini_index     5.82      1.80           3.24  0.00240
-    ## 4 urbanization2 -0.0544    0.0766        -0.711 0.481
+    ##   term              estimate  std.error statistic p.value
+    ##   <chr>                <dbl>      <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept)     -3.05      0.924         -3.30  0.00201
+    ## 2 med_income       0.0000122 0.00000392     3.11  0.00340
+    ## 3 gini_index       5.82      1.80           3.24  0.00240
+    ## 4 urbanizationlow  0.0544    0.0766         0.711 0.481
 
 ``` r
 fit3 <- update(forward1, . ~ . +high_degree)
@@ -1574,15 +1574,15 @@ summary(inter_model_aic1)
     ## -0.34687 -0.11903 -0.00746  0.10249  0.49588 
     ## 
     ## Coefficients:
-    ##                                      Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)                           -16.560     46.948  -0.353    0.726
-    ## high_degree                            16.951     53.020   0.320    0.751
-    ## gini_index                             32.101    103.364   0.311    0.758
-    ## urbanization2                          -7.898     63.278  -0.125    0.901
-    ## high_degree:gini_index                -31.646    117.132  -0.270    0.789
-    ## high_degree:urbanization2               6.689     71.791   0.093    0.926
-    ## gini_index:urbanization2               10.026    137.937   0.073    0.942
-    ## high_degree:gini_index:urbanization2   -6.159    156.822  -0.039    0.969
+    ##                                        Estimate Std. Error t value Pr(>|t|)
+    ## (Intercept)                             -24.458     42.426  -0.576    0.568
+    ## high_degree                              23.640     48.403   0.488    0.628
+    ## gini_index                               42.127     91.338   0.461    0.647
+    ## urbanizationlow                           7.898     63.278   0.125    0.901
+    ## high_degree:gini_index                  -37.804    104.274  -0.363    0.719
+    ## high_degree:urbanizationlow              -6.689     71.791  -0.093    0.926
+    ## gini_index:urbanizationlow              -10.026    137.937  -0.073    0.942
+    ## high_degree:gini_index:urbanizationlow    6.159    156.822   0.039    0.969
     ## 
     ## Residual standard error: 0.1989 on 37 degrees of freedom
     ## Multiple R-squared:  0.4745, Adjusted R-squared:  0.3751 
@@ -1606,15 +1606,15 @@ summary(inter_model_aic2)
     ## -0.37590 -0.12913 -0.01831  0.07931  0.46731 
     ## 
     ## Coefficients:
-    ##                                      Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)                            -1.116     37.799  -0.030    0.977
-    ## high_degree                            -1.418     42.829  -0.033    0.974
-    ## gini_index                             -3.278     82.397  -0.040    0.968
-    ## unemployment2                          -7.950     55.327  -0.144    0.887
-    ## high_degree:gini_index                 10.511     93.545   0.112    0.911
-    ## high_degree:unemployment2               6.910     62.869   0.110    0.913
-    ## gini_index:unemployment2               13.100    120.584   0.109    0.914
-    ## high_degree:gini_index:unemployment2  -10.190    137.205  -0.074    0.941
+    ##                                        Estimate Std. Error t value Pr(>|t|)
+    ## (Intercept)                             -9.0664    40.4019  -0.224    0.824
+    ## high_degree                              5.4920    46.0244   0.119    0.906
+    ## gini_index                               9.8217    88.0421   0.112    0.912
+    ## unemploymentlow                          7.9499    55.3273   0.144    0.887
+    ## high_degree:gini_index                   0.3214   100.3723   0.003    0.997
+    ## high_degree:unemploymentlow             -6.9098    62.8695  -0.110    0.913
+    ## gini_index:unemploymentlow             -13.1000   120.5844  -0.109    0.914
+    ## high_degree:gini_index:unemploymentlow  10.1895   137.2053   0.074    0.941
     ## 
     ## Residual standard error: 0.1994 on 37 degrees of freedom
     ## Multiple R-squared:  0.4719, Adjusted R-squared:  0.372 
@@ -1637,15 +1637,17 @@ summary(inter_model_income1)
     ## -0.42834 -0.11255 -0.01696  0.07826  0.50533 
     ## 
     ## Coefficients:
-    ##                                       Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)                          7.561e+00  8.913e+00   0.848    0.402
-    ## med_income                          -1.414e-04  1.727e-04  -0.819    0.418
-    ## gini_index                          -1.686e+01  2.011e+01  -0.838    0.407
-    ## urbanization2                        1.383e+01  1.217e+01   1.137    0.263
-    ## med_income:gini_index                3.271e-04  3.946e-04   0.829    0.412
-    ## med_income:urbanization2            -2.357e-04  2.161e-04  -1.091    0.282
-    ## gini_index:urbanization2            -2.998e+01  2.682e+01  -1.118    0.271
-    ## med_income:gini_index:urbanization2  5.113e-04  4.825e-04   1.060    0.296
+    ##                                         Estimate Std. Error t value Pr(>|t|)   
+    ## (Intercept)                            2.140e+01  8.283e+00   2.583  0.01389 * 
+    ## med_income                            -3.771e-04  1.298e-04  -2.905  0.00616 **
+    ## gini_index                            -4.684e+01  1.774e+01  -2.640  0.01206 * 
+    ## urbanizationlow                       -1.383e+01  1.217e+01  -1.137  0.26287   
+    ## med_income:gini_index                  8.384e-04  2.777e-04   3.019  0.00457 **
+    ## med_income:urbanizationlow             2.357e-04  2.161e-04   1.091  0.28248   
+    ## gini_index:urbanizationlow             2.998e+01  2.682e+01   1.118  0.27082   
+    ## med_income:gini_index:urbanizationlow -5.113e-04  4.825e-04  -1.060  0.29617   
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
     ## Residual standard error: 0.1972 on 37 degrees of freedom
     ## Multiple R-squared:  0.4832, Adjusted R-squared:  0.3854 
@@ -1668,15 +1670,17 @@ summary(inter_model_income2)
     ## -0.37760 -0.10759 -0.01941  0.07814  0.53562 
     ## 
     ## Coefficients:
-    ##                                       Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)                          1.008e+01  9.272e+00   1.087    0.284
-    ## med_income                          -1.933e-04  1.600e-04  -1.208    0.235
-    ## gini_index                          -2.270e+01  2.074e+01  -1.094    0.281
-    ## unemployment2                        1.319e+01  1.296e+01   1.017    0.316
-    ## med_income:gini_index                4.476e-04  3.588e-04   1.247    0.220
-    ## med_income:unemployment2            -2.138e-04  2.122e-04  -1.008    0.320
-    ## gini_index:unemployment2            -2.796e+01  2.844e+01  -0.983    0.332
-    ## med_income:gini_index:unemployment2  4.507e-04  4.667e-04   0.966    0.340
+    ##                                         Estimate Std. Error t value Pr(>|t|)   
+    ## (Intercept)                            2.326e+01  9.058e+00   2.568  0.01440 * 
+    ## med_income                            -4.071e-04  1.393e-04  -2.921  0.00591 **
+    ## gini_index                            -5.066e+01  1.945e+01  -2.604  0.01317 * 
+    ## unemploymentlow                       -1.319e+01  1.296e+01  -1.017  0.31564   
+    ## med_income:gini_index                  8.984e-04  2.985e-04   3.010  0.00469 **
+    ## med_income:unemploymentlow             2.138e-04  2.122e-04   1.008  0.32013   
+    ## gini_index:unemploymentlow             2.796e+01  2.844e+01   0.983  0.33188   
+    ## med_income:gini_index:unemploymentlow -4.507e-04  4.667e-04  -0.966  0.34047   
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
     ## Residual standard error: 0.1953 on 37 degrees of freedom
     ## Multiple R-squared:  0.4933, Adjusted R-squared:  0.3975 

@@ -135,16 +135,16 @@ use 1 and 2 to denote the level low and high
 ```{r}
 hc_df = 
   hc_df %>% 
-  mutate(
-    unemployment = case_when(
-      unemployment == "low" ~ 1,
-      unemployment == "high" ~ 2)
-  ) %>% 
-  mutate(
-    urbanization = case_when(
-      urbanization == "low" ~ 1,
-      urbanization == "high" ~ 2)
-  ) %>% 
+  #mutate(
+  #  unemployment = case_when(
+  #    unemployment == "low" ~ 1,
+  #    unemployment == "high" ~ 2)
+  #) %>% 
+  #mutate(
+  #  urbanization = case_when(
+  #    urbanization == "low" ~ 1,
+  #    urbanization == "high" ~ 2)
+  #) %>% 
   mutate(urbanization = as.factor(urbanization),
          unemployment = as.factor(unemployment)) %>% 
   select(-state)
