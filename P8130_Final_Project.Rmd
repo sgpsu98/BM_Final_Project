@@ -637,7 +637,7 @@ Model 2: rate ~ income + gini_index
 
 ```{r}
 model_1 = lm(rate ~ high_degree + gini_index, data = hc_df)
-model_2 = lm(rate ~ med_income + gini_index, data = hc_df)
+model_2 = lm(rate ~ med_income + gini_index + med_income * gini_index, data = hc_df)
 model = lm(rate ~ ., data = hc_df)
 ```
 
@@ -645,11 +645,17 @@ model = lm(rate ~ ., data = hc_df)
 ```{r}
 cp_1 = ols_mallows_cp(model_1, model)
 cp_2 = ols_mallows_cp(model_2, model)
+
+cp_1
+cp_2
 ```
 
 ```{r}
 mse_1 = get_mse(model_1, var.estimate = FALSE)
 mse_2 = get_mse(model_2, var.estimate = FALSE)
+
+mse_1
+mse_2
 ```
 
 ```{r}
