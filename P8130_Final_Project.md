@@ -1269,7 +1269,7 @@ cv_df %>%
     names_to = "model", 
     values_to = "rmse",
     names_prefix = "rmse_") %>% 
-  ggplot(aes(x = model, y = rmse)) + geom_violin() + labs(title = "Figure8. RMSE Violin Graph from Cross-Validation")
+  ggplot(aes(x = model, y = rmse)) + geom_violin() + labs(title = "Figure8. RMSE Violin Graph from Cross-Validation", x = "Our model: rate ~ gini_index + high_degree")
 ```
 
 <img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-25-1.png" width="90%" />
