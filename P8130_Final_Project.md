@@ -141,8 +141,7 @@ hc_df =
          non_white = perc_non_white)
 ```
 
-    ## 
-    ## -- Column specification --------------------------------------------------------
+    ## Parsed with column specification:
     ## cols(
     ##   state = col_character(),
     ##   unemployment = col_character(),
@@ -162,13 +161,13 @@ head(hc_df)
     ## # A tibble: 6 x 9
     ##   state unemployment urbanization med_income high_degree non_citizen gini_index
     ##   <chr> <chr>        <chr>             <dbl>       <dbl>       <dbl>      <dbl>
-    ## 1 Alab~ high         low               42278       0.821        0.02      0.472
-    ## 2 Alas~ high         low               67629       0.914        0.04      0.422
-    ## 3 Ariz~ high         high              49254       0.842        0.1       0.455
-    ## 4 Arka~ high         low               44922       0.824        0.04      0.458
-    ## 5 Cali~ high         high              60487       0.806        0.13      0.471
-    ## 6 Colo~ low          high              60940       0.893        0.06      0.457
-    ## # ... with 2 more variables: non_white <dbl>, rate <dbl>
+    ## 1 Alab… high         low               42278       0.821        0.02      0.472
+    ## 2 Alas… high         low               67629       0.914        0.04      0.422
+    ## 3 Ariz… high         high              49254       0.842        0.1       0.455
+    ## 4 Arka… high         low               44922       0.824        0.04      0.458
+    ## 5 Cali… high         high              60487       0.806        0.13      0.471
+    ## 6 Colo… low          high              60940       0.893        0.06      0.457
+    ## # … with 2 more variables: non_white <dbl>, rate <dbl>
 
 Description by table?
 
@@ -1216,7 +1215,7 @@ models.
 
 So the final model is rate \~ high\_degree + gini\_index
 
-# check the validity
+# Model Diagnostic
 
 ``` r
 model = lm(rate ~ high_degree + gini_index, data = hc_df)
@@ -1225,36 +1224,30 @@ model_full = lm(rate ~ ., data = hc_df)
 ```
 
 ``` r
-cp_1 = ols_mallows_cp(model, model)
-
-cp_1
-```
-
-    ## [1] 3
-
-``` r
-mse_1 = get_mse(model, var.estimate = FALSE)
-
-mse_1
-```
-
-    ## [1] 0.03635776
-
-``` r
-cp_1 = ols_mallows_cp(model, model_full)
-cp_1
+cp = ols_mallows_cp(model, model_full)
+cp
 ```
 
     ## [1] -1.352896
 
 ``` r
-mse_1 = get_mse(model, var.estimate = FALSE)
-mse_1
+mse = get_mse(model, var.estimate = FALSE)
+mse
 ```
 
     ## [1] 0.03635776
 
 ``` r
+model_summ = summary(model)
+model_summ$adj.r.squared
+```
+
+    ## [1] 0.4254814
+
+## Cross-Validation Plot and Diagnostic Plots:
+
+``` r
+set.seed(1)
 cv_df =
   crossv_mc(hc_df, 100) %>% 
   mutate(
@@ -1276,29 +1269,21 @@ cv_df %>%
     names_to = "model", 
     values_to = "rmse",
     names_prefix = "rmse_") %>% 
-  ggplot(aes(x = model, y = rmse)) + geom_violin()
+  ggplot(aes(x = model, y = rmse)) + geom_violin() + labs(title = "Figure8. RMSE Violin Graph from Cross-Validation")
 ```
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-27-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-25-1.png" width="90%" />
 
 ``` r
 mean(cv_df$rmse_linear)
 ```
 
-    ## [1] 0.2210806
-
-``` r
-model_summ = summary(model)
-model_summ$adj.r.squared
-```
-
-    ## [1] 0.4254814
-
-## plot
+    ## [1] 0.2075781
 
 ``` r
 par(mfrow=c(2,2))
 plot(model)
+title("Figure9. Diagnostic Graphs", line = -1, outer = TRUE)
 ```
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-29-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-26-1.png" width="90%" />
