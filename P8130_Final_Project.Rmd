@@ -528,8 +528,7 @@ Conclude: we find that the interaction terms are not significant since the p val
 So the final model is rate ~ high_degree + gini_index
 
 
-# check the validity
-
+# Model Diagnostic
 
 ```{r}
 model = lm(rate ~ high_degree + gini_index, data = hc_df)
@@ -537,30 +536,24 @@ model = lm(rate ~ high_degree + gini_index, data = hc_df)
 model_full = lm(rate ~ ., data = hc_df)
 ```
 
-
 ```{r}
-cp_1 = ols_mallows_cp(model, model)
+cp = ols_mallows_cp(model, model_full)
+cp
 
-cp_1
+mse = get_mse(model, var.estimate = FALSE)
+mse
 
+model_summ = summary(model)
+model_summ$adj.r.squared
+
+model_full_summ = summary(model_full)
+model_full_summ$adj.r.squared
 ```
 
-```{r}
-mse_1 = get_mse(model, var.estimate = FALSE)
-
-mse_1
-cp_1 = ols_mallows_cp(model, model_full)
-cp_1
-```
+## Cross-Validation Plot and Diagnostic Plots: 
 
 ```{r}
-mse_1 = get_mse(model, var.estimate = FALSE)
-mse_1
-
-```
-
-
-```{r}
+set.seed(1)
 cv_df =
   crossv_mc(hc_df, 100) %>% 
   mutate(
@@ -582,25 +575,16 @@ cv_df %>%
     names_to = "model", 
     values_to = "rmse",
     names_prefix = "rmse_") %>% 
-  ggplot(aes(x = model, y = rmse)) + geom_violin()
+  ggplot(aes(x = model, y = rmse)) + geom_violin() + labs(title = "Figure8. RMSE Violin Graph from Cross-Validation", x = "Our model: rate ~ gini_index + high_degree")
 
 mean(cv_df$rmse_linear)
 ```
 
 
-
-```{r}
-
-model_summ = summary(model)
-model_summ$adj.r.squared
-
-```
-
-## plot
-
 ```{r}
 par(mfrow=c(2,2))
 plot(model)
+title("Figure9. Diagnostic Graphs", line = -1, outer = TRUE)
 ```
 
 

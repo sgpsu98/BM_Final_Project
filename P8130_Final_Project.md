@@ -1232,7 +1232,7 @@ models.
 
 So the final model is rate \~ high\_degree + gini\_index
 
-# check the validity
+# Model Diagnostic
 
 ``` r
 model = lm(rate ~ high_degree + gini_index, data = hc_df)
@@ -1241,36 +1241,37 @@ model_full = lm(rate ~ ., data = hc_df)
 ```
 
 ``` r
-cp_1 = ols_mallows_cp(model, model)
-
-cp_1
-```
-
-    ## [1] 3
-
-``` r
-mse_1 = get_mse(model, var.estimate = FALSE)
-
-mse_1
-```
-
-    ## [1] 0.03635776
-
-``` r
-cp_1 = ols_mallows_cp(model, model_full)
-cp_1
+cp = ols_mallows_cp(model, model_full)
+cp
 ```
 
     ## [1] -1.352896
 
 ``` r
-mse_1 = get_mse(model, var.estimate = FALSE)
-mse_1
+mse = get_mse(model, var.estimate = FALSE)
+mse
 ```
 
     ## [1] 0.03635776
 
 ``` r
+model_summ = summary(model)
+model_summ$adj.r.squared
+```
+
+    ## [1] 0.4254814
+
+``` r
+model_full_summ = summary(model_full)
+model_full_summ$adj.r.squared
+```
+
+    ## [1] 0.3590534
+
+## Cross-Validation Plot and Diagnostic Plots:
+
+``` r
+set.seed(1)
 cv_df =
   crossv_mc(hc_df, 100) %>% 
   mutate(
@@ -1292,29 +1293,21 @@ cv_df %>%
     names_to = "model", 
     values_to = "rmse",
     names_prefix = "rmse_") %>% 
-  ggplot(aes(x = model, y = rmse)) + geom_violin()
+  ggplot(aes(x = model, y = rmse)) + geom_violin() + labs(title = "Figure8. RMSE Violin Graph from Cross-Validation", x = "Our model: rate ~ gini_index + high_degree")
 ```
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-27-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-25-1.png" width="90%" />
 
 ``` r
 mean(cv_df$rmse_linear)
 ```
 
-    ## [1] 0.2095248
-
-``` r
-model_summ = summary(model)
-model_summ$adj.r.squared
-```
-
-    ## [1] 0.4254814
-
-## plot
+    ## [1] 0.2075781
 
 ``` r
 par(mfrow=c(2,2))
 plot(model)
+title("Figure9. Diagnostic Graphs", line = -1, outer = TRUE)
 ```
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-29-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-26-1.png" width="90%" />
