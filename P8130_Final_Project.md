@@ -1054,7 +1054,11 @@ urbanization & high\_degree
 hc_df %>% 
   ggplot(aes(x = high_degree, y = rate, color = factor(urbanization))) +
   geom_point() +
-  stat_smooth(method = "lm", se = F)
+  stat_smooth(method = "lm", se = F) +
+  labs(title = "Figure4. high school degree vs. hate rate (By urbanization)",
+       x = "percentage of adults (>25 yrs.) with a high school degree",
+       y = " hate rate") +
+  theme(plot.title = element_text(hjust = .5 ))
 ```
 
     ## `geom_smooth()` using formula 'y ~ x'
@@ -1068,7 +1072,11 @@ urbanization & gini\_index
 hc_df %>% 
   ggplot(aes(x = gini_index, y = rate, color = factor(urbanization))) +
   geom_point() +
-  stat_smooth(method = "lm", se = F)
+  stat_smooth(method = "lm", se = F) +
+  labs(title = "Figure5. gini index vs. hate rate (By urbanization)",
+       x = "gini index",
+       y = " hate rate") +
+  theme(plot.title = element_text(hjust = .5 ))
 ```
 
     ## `geom_smooth()` using formula 'y ~ x'
@@ -1082,7 +1090,11 @@ unemployment & high\_degree
 hc_df %>% 
   ggplot(aes(x = high_degree, y = rate, color = factor(unemployment))) +
   geom_point() +
-  stat_smooth(method = "lm", se = F)
+  stat_smooth(method = "lm", se = F) +
+  labs(title = "Figure6. high school degree vs. hate rate (By unemployment)",
+       x = "percentage of adults (>25 yrs.) with a high school degree",
+       y = " hate rate") +
+  theme(plot.title = element_text(hjust = .5 ))
 ```
 
     ## `geom_smooth()` using formula 'y ~ x'
@@ -1096,7 +1108,11 @@ unemployment & gini
 hc_df %>% 
   ggplot(aes(x = gini_index, y = rate, color = factor(unemployment))) +
   geom_point() +
-  stat_smooth(method = "lm", se = F)
+  stat_smooth(method = "lm", se = F) +
+  labs(title = "Figure7. gini index vs. hate rate (By unemployment)",
+       x = "gini index",
+       y = " hate rate") +
+  theme(plot.title = element_text(hjust = .5 ))
 ```
 
     ## `geom_smooth()` using formula 'y ~ x'
@@ -1285,7 +1301,7 @@ cv_df %>%
 mean(cv_df$rmse_linear)
 ```
 
-    ## [1] 0.2210806
+    ## [1] 0.2095248
 
 ``` r
 model_summ = summary(model)
