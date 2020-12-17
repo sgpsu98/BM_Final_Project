@@ -526,6 +526,9 @@ mse
 
 model_summ = summary(model)
 model_summ$adj.r.squared
+
+model_full_summ = summary(model_full)
+model_full_summ$adj.r.squared
 ```
 
 ## Cross-Validation Plot and Diagnostic Plots: 

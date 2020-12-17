@@ -1244,6 +1244,13 @@ model_summ$adj.r.squared
 
     ## [1] 0.4254814
 
+``` r
+model_full_summ = summary(model_full)
+model_full_summ$adj.r.squared
+```
+
+    ## [1] 0.3590534
+
 ## Cross-Validation Plot and Diagnostic Plots:
 
 ``` r
