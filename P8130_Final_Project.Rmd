@@ -175,7 +175,7 @@ Since the p value is greater than 0.05, so we fail to reject the null and we cou
 
 ```{r }
 
-hc_df %>% cor() %>% round(., 2)
+hc_df %>% cor() %>% round(., 2) %>% knitr::kable(caption = "Table3. Correlation Matrix")
 ```
 
 

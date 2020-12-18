@@ -248,27 +248,21 @@ be normally distributed under the significance level of 5%.
 ## Correlation
 
 ``` r
-hc_df %>% cor() %>% round(., 2)
+hc_df %>% cor() %>% round(., 2) %>% knitr::kable(caption = "Table3. Correlation Matrix")
 ```
 
-    ##              unemployment urbanization med_income high_degree non_citizen
-    ## unemployment         1.00         0.24      -0.25       -0.45        0.24
-    ## urbanization         0.24         1.00       0.26       -0.16        0.68
-    ## med_income          -0.25         0.26       1.00        0.65        0.30
-    ## high_degree         -0.45        -0.16       0.65        1.00       -0.26
-    ## non_citizen          0.24         0.68       0.30       -0.26        1.00
-    ## gini_index           0.41         0.43      -0.13       -0.54        0.48
-    ## non_white            0.43         0.51       0.04       -0.50        0.75
-    ## rate                -0.02         0.21       0.34        0.26        0.24
-    ##              gini_index non_white  rate
-    ## unemployment       0.41      0.43 -0.02
-    ## urbanization       0.43      0.51  0.21
-    ## med_income        -0.13      0.04  0.34
-    ## high_degree       -0.54     -0.50  0.26
-    ## non_citizen        0.48      0.75  0.24
-    ## gini_index         1.00      0.55  0.38
-    ## non_white          0.55      1.00  0.11
-    ## rate               0.38      0.11  1.00
+|              | unemployment | urbanization | med\_income | high\_degree | non\_citizen | gini\_index | non\_white |   rate |
+| :----------- | -----------: | -----------: | ----------: | -----------: | -----------: | ----------: | ---------: | -----: |
+| unemployment |         1.00 |         0.24 |      \-0.25 |       \-0.45 |         0.24 |        0.41 |       0.43 | \-0.02 |
+| urbanization |         0.24 |         1.00 |        0.26 |       \-0.16 |         0.68 |        0.43 |       0.51 |   0.21 |
+| med\_income  |       \-0.25 |         0.26 |        1.00 |         0.65 |         0.30 |      \-0.13 |       0.04 |   0.34 |
+| high\_degree |       \-0.45 |       \-0.16 |        0.65 |         1.00 |       \-0.26 |      \-0.54 |     \-0.50 |   0.26 |
+| non\_citizen |         0.24 |         0.68 |        0.30 |       \-0.26 |         1.00 |        0.48 |       0.75 |   0.24 |
+| gini\_index  |         0.41 |         0.43 |      \-0.13 |       \-0.54 |         0.48 |        1.00 |       0.55 |   0.38 |
+| non\_white   |         0.43 |         0.51 |        0.04 |       \-0.50 |         0.75 |        0.55 |       1.00 |   0.11 |
+| rate         |       \-0.02 |         0.21 |        0.34 |         0.26 |         0.24 |        0.38 |       0.11 |   1.00 |
+
+Table3. Correlation Matrix
 
 ## Verify association
 
