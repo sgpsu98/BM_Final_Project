@@ -461,9 +461,9 @@ summary(model)
 
 ```
 
-Add Interaction: 
+Add Interaction for gini_index * high_degree: 
 
-<<<<<<< HEAD
+
 ```{r}
 model1 = 
   hc_df %>% 
@@ -473,10 +473,8 @@ summary(model1)
 ```
 
 
-1. check for adding all interactions for the two models
-=======
-1. Check for Adding All Interactions for the Two Models
->>>>>>> be40ce3d9f4eefeab09cffaef6b17ce13f94601b
+check for adding all interactions for the two models
+
 
 ```{r}
 inter_model_1= 
