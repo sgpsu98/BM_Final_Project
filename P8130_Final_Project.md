@@ -64,55 +64,6 @@ library(faraway)
 library(skimr)
 ```
 
-# Abstract
-
-# Introduction
-
-Hate crime is a significant issue under the present circumstances. There
-exist multiple variables related to hate crime. In this project, we
-intend to find the relationships between the hate crime rate and the
-eight variables.
-
-Among the eight variables, income status is about unemployment level,
-medians of household income, and Gini index in the dataset. Especially,
-the Gini index is a measure of the distribution of income across a
-population developed by the Italian statistician Corrado Gini in 1912.
-\[1\] In real life, the high-valued Gini index implies the high levels
-of inequality in the whole society. Also, the high unemployment rate
-will lower the medians of household income. People without employment
-are more likely to participate in hate crime. \[2\] Besides, the
-education level matters in income status. A higher level of education
-status, like the high-school degree in this study, will lead to an
-occupation with a higher salary, which can increase the medians of
-household income and decrease unemployment.
-
-Hate crime, according to website information
-(<https://hatecrime.campaign.gov.uk/>), is regarded as the criminal
-offence motivated by hostility or prejudice of others’ some
-characteristics, including race, religion, sexual orientation,
-transgender identity, disability. And our project mainly emphasizes on
-the possible variables which might have close relation with the hate
-crime rate.
-
-The race consideration might become the most common cause of hate crime.
-Based on the statistics provided
-(<https://law.jrank.org/pages/12135/Race-Ethnicity-Hate-Crimes.html> ),
-hate crimes resulting from race were about 49 percent in 2002 and 67
-percent of victims attacked for racial problems were black Americans.
-
-It is pointed out in this
-article(<https://www.assignmentpoint.com/arts/social-science/the-role-of-urbanization-in-increasing-crime-in-urban-area-2.html>)
-that the crime and urbanization seem to be correlated in terms of
-sociological aspects since it have be linked between criminal cases and
-the socio-economic development levels.
-
-<https://safer-america.com/map-of-reported-hate-crimes-in-the-u-s-a/>
-According to the Uniform Crime Reporting Program’s Hate Crime Statistics
-Program, all the hate crimes reported to the FBI in 2017 of all the
-states except Hawaii were shown, and the Pennsylvania had 1488 cases and
-ranked the first. While in terms of the Hate Crimes per 100,000, the
-District of Columbia had the largest figure of 27.81.
-
 # Data Analysis
 
 ## Tidy:
@@ -141,8 +92,7 @@ hc_df =
          non_white = perc_non_white)
 ```
 
-    ## 
-    ## -- Column specification --------------------------------------------------------
+    ## Parsed with column specification:
     ## cols(
     ##   state = col_character(),
     ##   unemployment = col_character(),
@@ -162,54 +112,48 @@ head(hc_df)
     ## # A tibble: 6 x 9
     ##   state unemployment urbanization med_income high_degree non_citizen gini_index
     ##   <chr> <chr>        <chr>             <dbl>       <dbl>       <dbl>      <dbl>
-    ## 1 Alab~ high         low               42278       0.821        0.02      0.472
-    ## 2 Alas~ high         low               67629       0.914        0.04      0.422
-    ## 3 Ariz~ high         high              49254       0.842        0.1       0.455
-    ## 4 Arka~ high         low               44922       0.824        0.04      0.458
-    ## 5 Cali~ high         high              60487       0.806        0.13      0.471
-    ## 6 Colo~ low          high              60940       0.893        0.06      0.457
-    ## # ... with 2 more variables: non_white <dbl>, rate <dbl>
+    ## 1 Alab… high         low               42278       0.821        0.02      0.472
+    ## 2 Alas… high         low               67629       0.914        0.04      0.422
+    ## 3 Ariz… high         high              49254       0.842        0.1       0.455
+    ## 4 Arka… high         low               44922       0.824        0.04      0.458
+    ## 5 Cali… high         high              60487       0.806        0.13      0.471
+    ## 6 Colo… low          high              60940       0.893        0.06      0.457
+    ## # … with 2 more variables: non_white <dbl>, rate <dbl>
 
-Description by table?
+### Description by table:
 
 ``` r
-skim(hc_df)
+char_df = hc_df %>% select(state, unemployment,urbanization)
+
+skim(char_df) %>% knitr::kable(caption = "Table 1. Summry of State and Unemployment")
 ```
 
-|                                                  |        |
-| :----------------------------------------------- | :----- |
-| Name                                             | hc\_df |
-| Number of rows                                   | 45     |
-| Number of columns                                | 9      |
-| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_   |        |
-| Column type frequency:                           |        |
-| character                                        | 3      |
-| numeric                                          | 6      |
-| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |        |
-| Group variables                                  | None   |
+| skim\_type | skim\_variable | n\_missing | complete\_rate | character.min | character.max | character.empty | character.n\_unique | character.whitespace |
+| :--------- | :------------- | ---------: | -------------: | ------------: | ------------: | --------------: | ------------------: | -------------------: |
+| character  | state          |          0 |              1 |             4 |            20 |               0 |                  45 |                    0 |
+| character  | unemployment   |          0 |              1 |             3 |             4 |               0 |                   2 |                    0 |
+| character  | urbanization   |          0 |              1 |             3 |             4 |               0 |                   2 |                    0 |
 
-Data summary
+Table 1. Summry of State and Unemployment
 
-**Variable type: character**
+``` r
+num_df = hc_df %>% select(med_income, high_degree, non_white, gini_index, non_citizen, rate)
 
-| skim\_variable | n\_missing | complete\_rate | min | max | empty | n\_unique | whitespace |
-| :------------- | ---------: | -------------: | --: | --: | ----: | --------: | ---------: |
-| state          |          0 |              1 |   4 |  20 |     0 |        45 |          0 |
-| unemployment   |          0 |              1 |   3 |   4 |     0 |         2 |          0 |
-| urbanization   |          0 |              1 |   3 |   4 |     0 |         2 |          0 |
+skim(num_df) %>% knitr::kable(caption = "Table 2. Summry of Numeric Variables")
+```
 
-**Variable type: numeric**
+| skim\_type | skim\_variable | n\_missing | complete\_rate | numeric.mean |   numeric.sd |  numeric.p0 |  numeric.p25 |  numeric.p50 |  numeric.p75 | numeric.p100 | numeric.hist |
+| :--------- | :------------- | ---------: | -------------: | -----------: | -----------: | ----------: | -----------: | -----------: | -----------: | -----------: | :----------- |
+| numeric    | med\_income    |          0 |              1 | 5.529949e+04 | 8979.4920934 | 3.95520e+04 | 4.806000e+04 | 5.491600e+04 | 6.070800e+04 | 76165.000000 | ▆▆▇▃▂        |
+| numeric    | high\_degree   |          0 |              1 | 8.666000e-01 |    0.0326576 | 7.99000e-01 | 8.390000e-01 | 8.710000e-01 | 8.930000e-01 |     0.915000 | ▃▆▅▇▇        |
+| numeric    | non\_white     |          0 |              1 | 3.175556e-01 |    0.1486936 | 6.00000e-02 | 2.100000e-01 | 3.000000e-01 | 4.200000e-01 |     0.630000 | ▃▇▅▅▂        |
+| numeric    | gini\_index    |          0 |              1 | 4.556889e-01 |    0.0209022 | 4.19000e-01 | 4.410000e-01 | 4.550000e-01 | 4.670000e-01 |     0.532000 | ▅▇▅▁▁        |
+| numeric    | non\_citizen   |          0 |              1 | 5.533330e-02 |    0.0312323 | 1.00000e-02 | 3.000000e-02 | 5.000000e-02 | 8.000000e-02 |     0.130000 | ▇▇▆▃▂        |
+| numeric    | rate           |          0 |              1 | 3.024300e-01 |    0.2515628 | 6.90608e-02 | 1.437401e-01 | 2.261971e-01 | 3.506204e-01 |     1.522302 | ▇▂▁▁▁        |
 
-| skim\_variable | n\_missing | complete\_rate |     mean |      sd |       p0 |      p25 |      p50 |      p75 |     p100 | hist  |
-| :------------- | ---------: | -------------: | -------: | ------: | -------: | -------: | -------: | -------: | -------: | :---- |
-| med\_income    |          0 |              1 | 55299.49 | 8979.49 | 39552.00 | 48060.00 | 54916.00 | 60708.00 | 76165.00 | ▆▆▇▃▂ |
-| high\_degree   |          0 |              1 |     0.87 |    0.03 |     0.80 |     0.84 |     0.87 |     0.89 |     0.92 | ▃▆▅▇▇ |
-| non\_citizen   |          0 |              1 |     0.06 |    0.03 |     0.01 |     0.03 |     0.05 |     0.08 |     0.13 | ▇▇▆▃▂ |
-| gini\_index    |          0 |              1 |     0.46 |    0.02 |     0.42 |     0.44 |     0.46 |     0.47 |     0.53 | ▅▇▅▁▁ |
-| non\_white     |          0 |              1 |     0.32 |    0.15 |     0.06 |     0.21 |     0.30 |     0.42 |     0.63 | ▃▇▅▅▂ |
-| rate           |          0 |              1 |     0.30 |    0.25 |     0.07 |     0.14 |     0.23 |     0.35 |     1.52 | ▇▂▁▁▁ |
+Table 2. Summry of Numeric Variables
 
-### change “unemployment” and “urbanization” from characters to corresponding numbers “1”,“2”
+### Change “unemployment” and “urbanization” from characters to corresponding numbers “1”,“2”
 
 use 1 and 2 to denote the level low and high
 
@@ -275,7 +219,7 @@ qqnorm(hc_df_log$lg, col=2, pch=19, cex=1.5, main = "Figure3. Normal Q-Q Plot")
 qqline(hc_df_log$lg, col = 1,lwd=2,lty=2)
 ```
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-3-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-4-1.png" width="90%" />
 
 Based on the QQ plot in terms of the log(hate crimes per 100k splc), the
 points are nearly distributed along the straight line, so there is not
@@ -1063,7 +1007,7 @@ hc_df %>%
 
     ## `geom_smooth()` using formula 'y ~ x'
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-16-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-17-1.png" width="90%" />
 
 urbanization & gini\_index
 
@@ -1081,7 +1025,7 @@ hc_df %>%
 
     ## `geom_smooth()` using formula 'y ~ x'
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-17-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-18-1.png" width="90%" />
 
 unemployment & high\_degree
 
@@ -1099,7 +1043,7 @@ hc_df %>%
 
     ## `geom_smooth()` using formula 'y ~ x'
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-18-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-19-1.png" width="90%" />
 
 unemployment & gini
 
@@ -1117,7 +1061,7 @@ hc_df %>%
 
     ## `geom_smooth()` using formula 'y ~ x'
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-19-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-20-1.png" width="90%" />
 
 We check the interaction for `urbanization` and `unemployment` among
 `high_degree`, and `gini_index` and find that the two variables have
@@ -1296,7 +1240,7 @@ cv_df %>%
   ggplot(aes(x = model, y = rmse)) + geom_violin() + labs(title = "Figure8. RMSE Violin Graph from Cross-Validation", x = "Our model: rate ~ gini_index + high_degree")
 ```
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-25-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-26-1.png" width="90%" />
 
 ``` r
 mean(cv_df$rmse_linear)
@@ -1310,4 +1254,4 @@ plot(model)
 title("Figure9. Diagnostic Graphs", line = -1, outer = TRUE)
 ```
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-26-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-27-1.png" width="90%" />
