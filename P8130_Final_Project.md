@@ -92,8 +92,7 @@ hc_df =
          non_white = perc_non_white)
 ```
 
-    ## 
-    ## -- Column specification --------------------------------------------------------
+    ## Parsed with column specification:
     ## cols(
     ##   state = col_character(),
     ##   unemployment = col_character(),
@@ -468,7 +467,10 @@ Since “med\_income” and “gini\_index” are significant predictors, then
 we use these two predictors as the basis of the model to explore further
 associations.
 
-## Use “gini\_index” as the Model Basis
+## Forward elimination
+
+It is the same as using “gini\_index” as the model basis since
+gini\_index has the smallest p-value.
 
 ``` r
 # step1
@@ -1095,9 +1097,7 @@ summary(model)
     ## Multiple R-squared:  0.4516, Adjusted R-squared:  0.4255 
     ## F-statistic: 17.29 on 2 and 42 DF,  p-value: 3.32e-06
 
-Add Interaction:
-
-\<\<\<\<\<\<\< HEAD
+Add Interaction for gini\_index \* high\_degree:
 
 ``` r
 model1 = 
@@ -1127,12 +1127,7 @@ summary(model1)
     ## Multiple R-squared:  0.4516, Adjusted R-squared:  0.4115 
     ## F-statistic: 11.25 on 3 and 41 DF,  p-value: 1.61e-05
 
-# 1\. check for adding all interactions for the two models
-
-1.  Check for Adding All Interactions for the Two Models \>\>\>\>\>\>\>
-    be40ce3d9f4eefeab09cffaef6b17ce13f94601b
-
-<!-- end list -->
+check for adding all interactions for the two models
 
 ``` r
 inter_model_1= 

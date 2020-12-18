@@ -257,7 +257,8 @@ Since "med_income" and "gini_index" are significant predictors, then we use thes
 
 
 
-## Use "gini_index" as the Model Basis
+## Forward elimination 
+It is the same as using "gini_index" as the model basis since gini_index has the smallest p-value.
 
 ```{r}
 # step1
