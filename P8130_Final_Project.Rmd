@@ -503,6 +503,15 @@ summary(model)
 
 add interaction: 
 
+```{r}
+model1 = 
+  hc_df %>% 
+  lm(rate ~ high_degree + gini_index + high_degree * gini_index, data = .)
+
+summary(model1)
+```
+
+
 1. check for adding all interactions for the two models
 
 ```{r}

@@ -1158,6 +1158,34 @@ summary(model)
 
 add interaction:
 
+``` r
+model1 = 
+  hc_df %>% 
+  lm(rate ~ high_degree + gini_index + high_degree * gini_index, data = .)
+
+summary(model1)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = rate ~ high_degree + gini_index + high_degree * 
+    ##     gini_index, data = .)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -0.33544 -0.11954 -0.03025  0.11433  0.52462 
+    ## 
+    ## Coefficients:
+    ##                        Estimate Std. Error t value Pr(>|t|)
+    ## (Intercept)              -7.406     26.401  -0.281    0.780
+    ## high_degree               4.266     29.982   0.142    0.888
+    ## gini_index                7.301     57.663   0.127    0.900
+    ## high_degree:gini_index    1.734     65.574   0.026    0.979
+    ## 
+    ## Residual standard error: 0.193 on 41 degrees of freedom
+    ## Multiple R-squared:  0.4516, Adjusted R-squared:  0.4115 
+    ## F-statistic: 11.25 on 3 and 41 DF,  p-value: 1.61e-05
+
 1.  check for adding all interactions for the two models
 
 <!-- end list -->
@@ -1296,7 +1324,7 @@ cv_df %>%
   ggplot(aes(x = model, y = rmse)) + geom_violin() + labs(title = "Figure8. RMSE Violin Graph from Cross-Validation", x = "Our model: rate ~ gini_index + high_degree")
 ```
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-25-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-26-1.png" width="90%" />
 
 ``` r
 mean(cv_df$rmse_linear)
@@ -1310,4 +1338,4 @@ plot(model)
 title("Figure9. Diagnostic Graphs", line = -1, outer = TRUE)
 ```
 
-<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-26-1.png" width="90%" />
+<img src="P8130_Final_Project_files/figure-gfm/unnamed-chunk-27-1.png" width="90%" />
