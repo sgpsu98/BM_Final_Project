@@ -467,7 +467,7 @@ Since “med\_income” and “gini\_index” are significant predictors, then
 we use these two predictors as the basis of the model to explore further
 associations.
 
-## use “gini\_index” as the model basis
+## Use “gini\_index” as the Model Basis
 
 ``` r
 # step1
@@ -693,7 +693,7 @@ tidy(fit5)
 Based on the results, the significant predictors are “gini\_index” and
 “high\_degree”.
 
-## use “med\_income” as the model basis
+## Use “med\_income” as the Model Basis
 
 ``` r
 income_reg = lm(rate ~ med_income, data = hc_df)
@@ -896,7 +896,7 @@ tidy(fit4)
 Based on the results, the significant predictors are “gini\_index” and
 “high\_degree”.
 
-## Stepwise method
+## Stepwise Method
 
 ``` r
 mult.fit = lm(rate ~ ., data = hc_df)
@@ -1062,9 +1062,9 @@ We check the interaction for `urbanization` and `unemployment` among
 interactions with urbanization and unemployment. Next step, we will
 check whether the interaction term is significant.
 
-# add interaction to model and check significance
+# Add Interaction to Model and Check Significance
 
-initial:
+Initial:
 
 ``` r
 model = 
@@ -1094,9 +1094,9 @@ summary(model)
     ## Multiple R-squared:  0.4516, Adjusted R-squared:  0.4255 
     ## F-statistic: 17.29 on 2 and 42 DF,  p-value: 3.32e-06
 
-add interaction:
+Add Interaction:
 
-1.  check for adding all interactions for the two models
+1.  Check for Adding All Interactions for the Two Models
 
 <!-- end list -->
 

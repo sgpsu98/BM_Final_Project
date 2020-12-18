@@ -179,9 +179,6 @@ hc_df %>% cor() %>% round(., 2) %>% knitr::kable(caption = "Table3. Correlation 
 ```
 
 
-
-
-
 ## Verify association
 
 **income**
@@ -260,8 +257,7 @@ Since "med_income" and "gini_index" are significant predictors, then we use thes
 
 
 
-## use "gini_index" as the model basis
-
+## Use "gini_index" as the Model Basis
 
 ```{r}
 # step1
@@ -316,10 +312,7 @@ tidy(fit5)
 Based on the results, the significant predictors are "gini_index" and "high_degree".
 
 
-
-
-
-## use "med_income" as the model basis
+## Use "med_income" as the Model Basis
 
 
 ```{r}
@@ -371,9 +364,7 @@ tidy(fit4)
 Based on the results, the significant predictors are "gini_index" and "high_degree".
 
 
-
-
-## Stepwise method
+## Stepwise Method
 
 ```{r}
 
@@ -384,9 +375,6 @@ step(mult.fit, direction='backward')
 The stepwise method shows the relationship； rate ~ high_degree + gini_index.
 
 The results are similar to the previous model, showing the "high_degree" and "gini_index" are significant.
-
-
-
 
 
 
@@ -460,9 +448,9 @@ hc_df %>%
 We check the interaction for `urbanization` and `unemployment` among `high_degree`, and `gini_index` and find that the two variables have interactions with urbanization and unemployment. Next step, we will check whether the interaction term is significant.
 
 
-# add interaction to model and check significance
+# Add Interaction to Model and Check Significance
 
-initial:
+Initial:
 
 ```{r}
 model = 
@@ -473,9 +461,9 @@ summary(model)
 
 ```
 
-add interaction: 
+Add Interaction: 
 
-1. check for adding all interactions for the two models
+1. Check for Adding All Interactions for the Two Models
 
 ```{r}
 inter_model_1= 
